@@ -1,0 +1,198 @@
+#
+# Configuration of the OpenID Federation service in the local federation, active with the "compose" profile. See
+# https://github.com/swedenconnect/openid-federation-services/blob/main/docs/service-configuration.md for the
+# settings.
+#
+# The federation data (entities, trust anchor and intermediates, trust mark issuers and resolver) is read from the
+# JSON files in this directory when the service starts. After a change, restart the service:
+#
+#   docker compose restart openid-federation
+#
+# The directories are given by the environment variables that docker-compose.yml sets:
+#   APP_CONFIG_DIR    - this directory
+#   COMMON_CONFIG_DIR - config/common
+#
+# TEST CREDENTIALS ONLY: the key stores are committed to the repository and the password is "secret".
+#
+
+spring:
+  ssl:
+    bundle:
+      jks:
+        tls:
+          keystore:
+            type: JKS
+            location: file:${COMMON_CONFIG_DIR}/tls.jks
+            password: secret
+          key:
+            alias: tls
+            password: secret
+        # The trust of the HTTP client that fetches entity configurations and subordinate statements, for example
+        # those of the services that publish their own entity configurations.
+        trust:
+          truststore:
+            type: JKS
+            location: file:${COMMON_CONFIG_DIR}/trust.jks
+            password: secret
+
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    bundle: tls
+
+management:
+  server:
+    port: 8444
+    ssl:
+      enabled: true
+      bundle: tls
+  # No tracing collector runs in the local federation.
+  tracing:
+    enabled: false
+    sampling:
+      probability: 0.0
+  otlp:
+    metrics:
+      export:
+        enabled: false
+    tracing:
+      export:
+        enabled: false
+
+logging:
+  structured:
+    format:
+      console:
+  level:
+    ROOT: INFO
+    se.swedenconnect: INFO
+
+#
+# The federation keys. Each federation entity has a key of its own in federation-keys.jks (EC P-521). An entity
+# signs with the first key of its "jwks", here "federation:<bundle name>".
+#
+credential:
+  bundles:
+    keystore:
+      federation-keys:
+        type: JKS
+        location: file:${APP_CONFIG_DIR}/federation-keys.jks
+        password: secret
+    jks:
+      trustanchor:
+        name: "Local Federation Trust Anchor"
+        store-reference: federation-keys
+        key:
+          alias: trustanchor
+          key-password: secret
+      tmi-loa:
+        name: "Local Federation Level of Assurance Trust Mark Issuer"
+        store-reference: federation-keys
+        key:
+          alias: tmi-loa
+          key-password: secret
+      tmi-contracts:
+        name: "Local Federation Contracts Trust Mark Issuer"
+        store-reference: federation-keys
+        key:
+          alias: tmi-contracts
+          key-password: secret
+      im-reg-sc:
+        name: "Local Federation RP Registration Intermediate"
+        store-reference: federation-keys
+        key:
+          alias: im-reg-sc
+          key-password: secret
+      im-reg-sc-op:
+        name: "Local Federation OP Registration Intermediate"
+        store-reference: federation-keys
+        key:
+          alias: im-reg-sc-op
+          key-password: secret
+
+federation:
+  keys:
+    mapping:
+      federation:
+        - trustanchor
+        - tmi-loa
+        - tmi-contracts
+        - im-reg-sc
+        - im-reg-sc-op
+    #
+    # The public federation keys of the entities that publish their own entity configurations. They are referenced
+    # as "public:<name>" in the subordinate entries of trust-anchors.json. Add the key of your own service here.
+    #
+    # The keys between the BEGIN and END markers are written by scripts/generate-credentials.sh. Keep the markers.
+    #
+    additional-keys:
+      # BEGIN reference-authn-server
+      - name: reference-authn-server
+        certificate: |
+          -----BEGIN CERTIFICATE-----
+          MIICJjCCAcygAwIBAgIJAKdv9jtoHE2KMAoGCCqGSM49BAMCMIGGMQswCQYDVQQG
+          EwJTRTEXMBUGA1UEChMOU3dlZGVuIENvbm5lY3QxJTAjBgNVBAsTHFRFU1QgT05M
+          WSAtIExvY2FsIEZlZGVyYXRpb24xNzA1BgNVBAMTLlJlZmVyZW5jZSBBdXRoZW50
+          aWNhdGlvbiBTZXJ2ZXIgRmVkZXJhdGlvbiBLZXkwHhcNMjYxMDAzMDkxMzE4WhcN
+          MzYwOTMwMDkxMzE4WjCBhjELMAkGA1UEBhMCU0UxFzAVBgNVBAoTDlN3ZWRlbiBD
+          b25uZWN0MSUwIwYDVQQLExxURVNUIE9OTFkgLSBMb2NhbCBGZWRlcmF0aW9uMTcw
+          NQYDVQQDEy5SZWZlcmVuY2UgQXV0aGVudGljYXRpb24gU2VydmVyIEZlZGVyYXRp
+          b24gS2V5MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE3cpEauGQ1/uBQdRWSMI6
+          Pn4keqgTnPLV0I1WLApJ2mlXkyfQVHmoJx3D5kVVbIIkVvVbj5J7DSioH0g0ze3R
+          gKMhMB8wHQYDVR0OBBYEFN9bEXa92eDSOybt/hgNyOzzmw6JMAoGCCqGSM49BAMC
+          A0gAMEUCIB5ZEV3RdqZSzptzf0fhKZAu9FoH68sMPahENoNZ56ypAiEA4bI6StSJ
+          LkqJmUa6CXOkjHBpQzDe3R/w3KLI6fF1LRs=
+          -----END CERTIFICATE-----
+      # END reference-authn-server
+      # BEGIN test-my-eid
+      - name: test-my-eid
+        certificate: |
+          -----BEGIN CERTIFICATE-----
+          MIIB/TCCAaKgAwIBAgIJALGmWIdrAeaeMAoGCCqGSM49BAMCMHIxCzAJBgNVBAYT
+          AlNFMRcwFQYDVQQKEw5Td2VkZW4gQ29ubmVjdDElMCMGA1UECxMcVEVTVCBPTkxZ
+          IC0gTG9jYWwgRmVkZXJhdGlvbjEjMCEGA1UEAxMaVGVzdCBteSBlSUQgRmVkZXJh
+          dGlvbiBLZXkwHhcNMjYxMDAzMDkxMzE5WhcNMzYwOTMwMDkxMzE5WjByMQswCQYD
+          VQQGEwJTRTEXMBUGA1UEChMOU3dlZGVuIENvbm5lY3QxJTAjBgNVBAsTHFRFU1Qg
+          T05MWSAtIExvY2FsIEZlZGVyYXRpb24xIzAhBgNVBAMTGlRlc3QgbXkgZUlEIEZl
+          ZGVyYXRpb24gS2V5MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEgkAJRX4rPO7v
+          4E5gbxlOP7Gmj6qvshXDqaC6yHs6n/+kG8rtvM/RYFnoRMZPD9ysgJT9+8XtYy1u
+          j9uN/hxPpKMhMB8wHQYDVR0OBBYEFJ7jdRlGzNkabVBwshRcXclU0gPeMAoGCCqG
+          SM49BAMCA0kAMEYCIQCNndo3//vPCKqwSrSLmfZJj/FbNxBd2Z5CpWJWnUcU4AIh
+          ANsO2BYoBMaq/SO3B9DyUjq+wJFDtmNMcmmfP4G9QD14
+          -----END CERTIFICATE-----
+      # END test-my-eid
+      # BEGIN test-client
+      - name: test-client
+        certificate: |
+          -----BEGIN CERTIFICATE-----
+          MIIB+jCCAaGgAwIBAgIIPJSgp1IK41wwCgYIKoZIzj0EAwIwcjELMAkGA1UEBhMC
+          U0UxFzAVBgNVBAoTDlN3ZWRlbiBDb25uZWN0MSUwIwYDVQQLExxURVNUIE9OTFkg
+          LSBMb2NhbCBGZWRlcmF0aW9uMSMwIQYDVQQDExpUZXN0IENsaWVudCBGZWRlcmF0
+          aW9uIEtleTAeFw0yNjEwMDMwOTEzMTlaFw0zNjA5MzAwOTEzMTlaMHIxCzAJBgNV
+          BAYTAlNFMRcwFQYDVQQKEw5Td2VkZW4gQ29ubmVjdDElMCMGA1UECxMcVEVTVCBP
+          TkxZIC0gTG9jYWwgRmVkZXJhdGlvbjEjMCEGA1UEAxMaVGVzdCBDbGllbnQgRmVk
+          ZXJhdGlvbiBLZXkwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARCjsRNKCipkuF2
+          VWVxVCkaoI1Bs4EY6f84sz7Lbzst5SpHKkNBryH0HFgraA3QxkveYpyvvgyiibOh
+          Wwkwq/etoyEwHzAdBgNVHQ4EFgQUrDXY+UVWzNW4SnMlpCdBTSvVCL8wCgYIKoZI
+          zj0EAwIDRwAwRAIgQWPUTDFcT/7w+Vmh5TGgCN+go1T260s2wKpLQe353LkCIFxm
+          RmF+khOF44fymcnTZO3ypNyhcfAcy26visz5nCOa
+          -----END CERTIFICATE-----
+      # END test-client
+  service:
+    storage: memory
+  routing:
+    enabled: true
+    mode: IGNORING
+  resolver:
+    client:
+      name: resolver-client
+      trust-store-bundle-name: trust
+  registry:
+    integration:
+      enabled: false
+  local-registry:
+    entities: "file:${APP_CONFIG_DIR}/entities.json"
+    trust-anchors: "file:${APP_CONFIG_DIR}/trust-anchors.json"
+    trust-mark-issuers: "file:${APP_CONFIG_DIR}/trust-mark-issuers.json"
+    resolvers: "file:${APP_CONFIG_DIR}/resolvers.json"

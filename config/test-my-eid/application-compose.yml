@@ -1,0 +1,117 @@
+#
+# Configuration of test-my-eid in the local federation, active with the "compose" profile.
+#
+# The directories are given by the environment variables that docker-compose.yml sets:
+#   APP_CONFIG_DIR    - this directory
+#   COMMON_CONFIG_DIR - config/common
+#   HOST_PORT         - the port the service is reached on from the browser
+#
+# TEST CREDENTIALS ONLY: the key stores are committed to the repository and the password is "secret".
+#
+
+spring:
+  ssl:
+    bundle:
+      jks:
+        tls:
+          keystore:
+            type: JKS
+            location: file:${COMMON_CONFIG_DIR}/tls.jks
+            password: secret
+          key:
+            alias: tls
+            password: secret
+
+credential:
+  bundles:
+    keystore:
+      sp-keys:
+        type: JKS
+        location: file:${APP_CONFIG_DIR}/sp-keys.jks
+        password: secret
+      # The OpenID Federation key, registered in the federation (config/openid-federation).
+      federation-key:
+        type: JKS
+        location: file:${APP_CONFIG_DIR}/federation-key.jks
+        password: secret
+    jks:
+      sign:
+        name: "Test my eID SAML Signing"
+        store-reference: sp-keys
+        key:
+          alias: sign
+          key-password: secret
+      decrypt:
+        name: "Test my eID SAML Encryption"
+        store-reference: sp-keys
+        key:
+          alias: encrypt
+          key-password: secret
+      md-sign:
+        name: "Test my eID Metadata Signing"
+        store-reference: sp-keys
+        key:
+          alias: metadata-sign
+          key-password: secret
+      oidf-federation:
+        name: "Test my eID Federation Key"
+        store-reference: federation-key
+        key:
+          alias: federation
+          key-password: secret
+
+server:
+  servlet:
+    context-path: /testmyeid
+  ssl:
+    enabled: true
+    bundle: tls
+
+sp:
+  base-uri: https://local.fed.swedenconnect.se:${HOST_PORT}
+  entity-id: https://local.fed.swedenconnect.se/testmyeid
+  sign-entity-id: https://local.fed.swedenconnect.se/testmyeid-sign
+  credential:
+    sign:
+      bundle: sign
+    decrypt:
+      bundle: decrypt
+    md-sign:
+      bundle: md-sign
+  discovery:
+    # Every Identity Provider of the metadata feed is offered, the reference IdP among them.
+    include-only-static: false
+  eidas-connector:
+    # test-my-eid requires this setting. The local federation has no eIDAS connector yet.
+    entity-id: https://local.fed.swedenconnect.se/connector
+  federation:
+    metadata:
+      url: https://local.fed.swedenconnect.se:11000/metadata/mdx/role/idp.xml
+      validation-certificate: file:${COMMON_CONFIG_DIR}/metadata-signing.crt
+
+# The OpenID Connect RP. Its entity identifier, and client ID, is the base URI and context path,
+# https://local.fed.swedenconnect.se:11020/testmyeid, registered under im-reg-sc in the OpenID Federation. It uses the
+# SAML signing and decryption keys for OpenID Connect.
+rp:
+  credential:
+    federation:
+      bundle: oidf-federation
+  federation:
+    enabled: true
+    trust-anchor:
+      entity-id: https://local.fed.swedenconnect.se:11040/trustanchor
+      jwks-resource: file:${COMMON_CONFIG_DIR}/oidf-trust-anchor.jwks
+    # The OpenID Providers are registered under the OP Registration Intermediate.
+    listing-sources:
+      - entity-id: https://local.fed.swedenconnect.se:11040/im-reg-sc-op
+    authority-hints:
+      - https://local.fed.swedenconnect.se:11040/im-reg-sc
+    trust-mark-issuers:
+      - entity-id: https://local.fed.swedenconnect.se:11040/tmi-contracts
+        trust-mark-types:
+          - https://id.swedenconnect.se/contract/sc/eid-authorization-system
+
+logging:
+  level:
+    root: INFO
+    testmyeid: DEBUG

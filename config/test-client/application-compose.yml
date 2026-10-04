@@ -1,0 +1,211 @@
+#
+# Configuration of the Sweden Connect test client in the local federation, active with the "compose" profile.
+# See https://github.com/swedenconnect/sweden-connect-test-client/blob/main/docs/configuration.md for the settings.
+#
+# The directories are given by the environment variables that docker-compose.yml sets:
+#   APP_CONFIG_DIR    - this directory
+#   COMMON_CONFIG_DIR - config/common
+#   HOST_PORT         - the port the service is reached on from the browser
+#
+# TEST CREDENTIALS ONLY: the key stores are committed to the repository and the password is "secret".
+#
+
+spring:
+  ssl:
+    bundle:
+      jks:
+        tls:
+          keystore:
+            type: JKS
+            location: file:${COMMON_CONFIG_DIR}/tls.jks
+            password: secret
+          key:
+            alias: tls
+            password: secret
+
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    bundle: tls
+
+credential:
+  bundles:
+    keystore:
+      sp-keys:
+        type: JKS
+        location: file:${APP_CONFIG_DIR}/sp-keys.jks
+        password: secret
+      oidc-keys:
+        type: JKS
+        location: file:${APP_CONFIG_DIR}/oidc-keys.jks
+        password: secret
+      # The OpenID Federation key, registered in the federation (config/openid-federation).
+      federation-key:
+        type: JKS
+        location: file:${APP_CONFIG_DIR}/federation-key.jks
+        password: secret
+    jks:
+      sp-sign:
+        name: "Test Client SAML Signing"
+        store-reference: sp-keys
+        key:
+          alias: sign
+          key-password: secret
+      sp-encrypt:
+        name: "Test Client SAML Encryption"
+        store-reference: sp-keys
+        key:
+          alias: encrypt
+          key-password: secret
+      oidc-sign:
+        name: "Test Client OIDC Signing"
+        store-reference: oidc-keys
+        key:
+          alias: oidc-sign
+          key-password: secret
+      oidf-federation:
+        name: "Test Client Federation Key"
+        store-reference: federation-key
+        key:
+          alias: federation
+          key-password: secret
+
+testclient:
+  base-url: https://local.fed.swedenconnect.se:${HOST_PORT}
+  default-credential:
+    bundle: sp-sign
+  tls:
+    # The trust store of the JVM holds the TLS certificate of the local federation.
+    default-tls-trust: JVM_TRUST
+
+  oidc:
+    enabled: true
+    # The immediate superior of the RP, published as authority_hints in its entity configuration.
+    openid-fed-authorities:
+      - https://local.fed.swedenconnect.se:11040/im-reg-sc
+    federation:
+      enabled: true
+      trust-anchors:
+        - entity-id: https://local.fed.swedenconnect.se:11040/trustanchor
+          jwks: file:${COMMON_CONFIG_DIR}/oidf-trust-anchor.jwks
+          discover-ops: true
+          # The OpenID Providers are registered under the OP Registration Intermediate.
+          subordinate-listing-sources:
+            - entity-id: https://local.fed.swedenconnect.se:11040/im-reg-sc-op
+      auto-configure-ops: true
+      refresh-interval: 10m
+      organization-number: "2021006883"
+      entity-metadata:
+        organization-name: "Sweden Connect"
+        contacts:
+          - operations@swedenconnect.se
+      trust-marks:
+        - trust-mark-type: https://id.swedenconnect.se/contract/sc/eid-authorization-system
+          issuer: https://local.fed.swedenconnect.se:11040/tmi-contracts
+    rps:
+      # The entity identifier, and client ID, is the base URL followed by the path suffix:
+      # https://local.fed.swedenconnect.se:11030/testrp1. It is registered under im-reg-sc in the OpenID Federation.
+      - path-suffix: "testrp1"
+        description: "Test OIDC RP 1 - RP for personal identity number authentication"
+        metadata: |
+          {
+            "response_types" : [ "code" ],
+            "grant_types" : [ "authorization_code" ],
+            "client_name" : "Sweden Connect Test-RP 1",
+            "client_name#sv" : "Sweden Connect Test-RP 1",
+            "client_name#en" : "Sweden Connect Test RP 1",
+            "client_uri" : "https://local.fed.swedenconnect.se:11030",
+            "logo_uri" : "<logo>",
+            "contacts" : [ "operations@swedenconnect.se" ],
+            "organization_name#sv" : "Sweden Connect",
+            "organization_name#en" : "Sweden Connect",
+            "organization_identifier" : "urn:glue:iso6523:0007:2021006883",
+            "subject_type" : "pairwise",
+            "token_endpoint_auth_method" : "private_key_jwt",
+            "require_auth_time" : true
+          }
+        credentials:
+          signing:
+            bundle: oidc-sign
+          encryption:
+            bundle: sp-encrypt
+          metadata:
+            bundle: oidf-federation
+
+  saml:
+    enabled: true
+    federation:
+      description: "Sweden Connect Local Federation"
+      source:
+        - metadata-location: https://local.fed.swedenconnect.se:11000/metadata/mdx/role/idp.xml
+          validation-certificate: file:${COMMON_CONFIG_DIR}/metadata-signing.crt
+          backup-location: ${APP_CONFIG_DIR}/cache/idp-metadata-backup.xml
+      idp-sorting:
+        - https://local.fed.swedenconnect.se/idp
+    common-metadata:
+      metadata-template: classpath:saml-metadata-template.xml
+      default-entity-categories:
+        - http://id.elegnamnden.se/ec/1.0/loa3-pnr
+        - http://id.swedenconnect.se/ec/sc/uncertified-loa3-pnr
+        - http://id.elegnamnden.se/st/1.0/public-sector-sp
+        - http://id.swedenconnect.se/contract/sc/sweden-connect
+        - http://id.swedenconnect.se/contract/sc/eid-choice-2017
+        - http://id.swedenconnect.se/general-ec/1.0/secure-authenticator-binding
+        - http://id.swedenconnect.se/general-ec/1.0/accepts-coordination-number
+    sps:
+      - entity-id: https://local.fed.swedenconnect.se/test-client/sp1
+        description: "Test SP 1 - SP for personal identity number authentication"
+        path-suffix: "sp1"
+        metadata:
+          name-id-formats:
+            - urn:oasis:names:tc:SAML:2.0:nameid-format:persistent
+          wants-assertions-signed: true
+          ui-info:
+            display-name:
+              - "sv-Sweden Connect Test-SP 1"
+              - "en-Sweden Connect Test SP 1"
+          attribute-consuming-services:
+            - service-name:
+                - "sv-Personnummerlegitimering"
+                - "en-Authentication using personal identity number"
+              requested-attributes:
+                - attribute-name: urn:oid:1.2.752.29.4.13
+                  required: true
+        credentials:
+          signing:
+            bundle: sp-sign
+          encryption:
+            bundle: sp-encrypt
+      - entity-id: https://local.fed.swedenconnect.se/test-client/sign1
+        description: "Test SignService 1 - Signature service for personal identity number authentication"
+        path-suffix: "sign1"
+        metadata:
+          entity-categories:
+            - http://id.elegnamnden.se/st/1.0/sigservice
+            - http://id.elegnamnden.se/ec/1.0/loa3-pnr
+            - http://id.swedenconnect.se/ec/sc/uncertified-loa3-pnr
+            - http://id.elegnamnden.se/st/1.0/public-sector-sp
+            - http://id.swedenconnect.se/contract/sc/sweden-connect
+            - http://id.swedenconnect.se/contract/sc/eid-choice-2017
+            - http://id.swedenconnect.se/general-ec/1.0/secure-authenticator-binding
+            - http://id.swedenconnect.se/general-ec/1.0/accepts-coordination-number
+          name-id-formats:
+            - urn:oasis:names:tc:SAML:2.0:nameid-format:persistent
+          wants-assertions-signed: true
+          ui-info:
+            display-name:
+              - "sv-Sweden Connect Test - Underskriftstjänst 1"
+              - "en-Sweden Connect Test - SignService 1"
+          attribute-consuming-services:
+            - service-name:
+                - "sv-Personnummerlegitimering"
+                - "en-Authentication using personal identity number"
+              requested-attributes:
+                - attribute-name: urn:oid:1.2.752.29.4.13
+                  required: true
+        credentials:
+          signing:
+            bundle: sp-sign
+          encryption:
+            bundle: sp-encrypt

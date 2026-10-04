@@ -1,0 +1,7 @@
+[
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/trustanchor",
+    "trust-anchor": "https://local.fed.swedenconnect.se:11040/trustanchor",
+    "trusted-keys": "federation:trustanchor"
+  }
+]

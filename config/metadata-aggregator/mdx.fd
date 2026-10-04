@@ -1,0 +1,7 @@
+#
+# The sources of the feed: every entity metadata file in the metadata directory.
+#
+- when update:
+    - load:
+        - /opt/aggregator/metadata
+    - break

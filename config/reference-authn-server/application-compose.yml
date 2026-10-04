@@ -1,0 +1,166 @@
+#
+# Configuration of the Sweden Connect reference authentication server in the local federation, active with the
+# "compose" profile. It supplies what the default configuration of the service leaves to the deployment, see
+# https://github.com/swedenconnect/spring-authentication-server/tree/main/sweden-connect-reference.
+#
+# The directories and values are given by the environment variables that docker-compose.yml sets:
+#   APP_CONFIG_DIR    - this directory
+#   COMMON_CONFIG_DIR - config/common
+#   HOST_PORT         - the port the service is reached on from the browser
+#   REDIS_PASSWORD    - the password of Redis
+#
+# TEST CREDENTIALS ONLY: the key stores are committed to the repository and the password is "secret".
+#
+
+spring:
+  ssl:
+    bundle:
+      jks:
+        tls:
+          key:
+            alias: tls
+            password: secret
+          keystore:
+            location: file:${COMMON_CONFIG_DIR}/tls.jks
+            password: secret
+            type: JKS
+  data:
+    redis:
+      host: redis
+      port: 6379
+      password: ${REDIS_PASSWORD}
+      ssl:
+        enabled: false
+
+credential:
+  bundles:
+    keystore:
+      reference-keys:
+        location: file:${APP_CONFIG_DIR}/saml-keys.jks
+        password: secret
+        type: JKS
+      oidc-keys:
+        location: file:${APP_CONFIG_DIR}/oidc-keys.jks
+        password: secret
+        type: JKS
+      # The OpenID Federation key, registered in the federation (config/openid-federation).
+      federation-key:
+        location: file:${APP_CONFIG_DIR}/federation-key.jks
+        password: secret
+        type: JKS
+    jks:
+      saml-sign:
+        name: "SAML Signing Key"
+        store-reference: reference-keys
+        key:
+          alias: saml-sign
+          key-password: secret
+      saml-encrypt:
+        name: "SAML Encryption Key"
+        store-reference: reference-keys
+        key:
+          alias: saml-encrypt
+          key-password: secret
+      oidc-sign:
+        name: "OIDC Signing Key"
+        store-reference: oidc-keys
+        key:
+          alias: oidc-sign
+          key-password: secret
+      oidf-federation:
+        name: "OpenID Federation Key"
+        store-reference: federation-key
+        key:
+          alias: federation
+          key-password: secret
+
+authn-server:
+  base-url: https://local.fed.swedenconnect.se:${HOST_PORT}
+  subject-identifier:
+    secret: local-federation-test-secret
+
+  # The HTTP session, single sign-on and the stores are kept in Redis.
+  storage:
+    type: redis
+  redis:
+    key-prefix: reference-authn-server
+
+  saml:
+    entity-id: https://local.fed.swedenconnect.se/idp
+    credentials:
+      sign:
+        bundle: saml-sign
+      encrypt:
+        bundle: saml-encrypt
+      metadata-sign:
+        bundle: saml-sign
+    metadata-providers:
+      - location: https://local.fed.swedenconnect.se:11000/metadata/mdx/role/sp.xml
+        validation-certificate: file:${COMMON_CONFIG_DIR}/metadata-signing.crt
+        backup-location: ${APP_CONFIG_DIR}/cache/sp-metadata-backup.xml
+
+  # The OpenID Provider. The issuer, which is also its OpenID Federation entity identifier, is the base URL,
+  # https://local.fed.swedenconnect.se:11010. It is registered under im-reg-sc-op in the OpenID Federation.
+  oidc:
+    enabled: true
+    issuer: https://local.fed.swedenconnect.se:${HOST_PORT}
+    keys:
+      signing:
+        - credential:
+            bundle: oidc-sign
+    federation:
+      enabled: true
+      authority-hints:
+        - https://local.fed.swedenconnect.se:11040/im-reg-sc-op
+      keys:
+        - credential:
+            bundle: oidf-federation
+      # The trust marks of the OpenID Provider, verified with the federation keys of their issuers.
+      trust-marks:
+        - type: https://id.swedenconnect.se/loa/loa2
+          issuer: https://local.fed.swedenconnect.se:11040/tmi-loa
+          jwks: file:${COMMON_CONFIG_DIR}/oidf-tmi-loa.jwks
+        - type: https://id.swedenconnect.se/loa/loa3
+          issuer: https://local.fed.swedenconnect.se:11040/tmi-loa
+          jwks: file:${COMMON_CONFIG_DIR}/oidf-tmi-loa.jwks
+        - type: https://id.swedenconnect.se/loa/loa4
+          issuer: https://local.fed.swedenconnect.se:11040/tmi-loa
+          jwks: file:${COMMON_CONFIG_DIR}/oidf-tmi-loa.jwks
+        - type: https://id.swedenconnect.se/contract/sc/eid-authorization-system
+          issuer: https://local.fed.swedenconnect.se:11040/tmi-contracts
+          jwks: file:${COMMON_CONFIG_DIR}/oidf-tmi-contracts.jwks
+        - type: https://id.swedenconnect.se/contract/sc/prepaid-auth-2021
+          issuer: https://local.fed.swedenconnect.se:11040/tmi-contracts
+          jwks: file:${COMMON_CONFIG_DIR}/oidf-tmi-contracts.jwks
+      # The clients, Relying Parties, are resolved through the federation at the trust anchor. No trust marks are
+      # required of them.
+      trust-anchor:
+        entity-id: https://local.fed.swedenconnect.se:11040/trustanchor
+        jwks: file:${COMMON_CONFIG_DIR}/oidf-trust-anchor.jwks
+
+# Audit events are kept in memory, where the Actuator's auditevents endpoint can read them, and written to a file
+# that is rolled daily.
+audit:
+  repository:
+    in-memory:
+      enabled: true
+    file:
+      log-file: ${APP_CONFIG_DIR}/audit/audit.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, clients, auditevents
+  endpoint:
+    health:
+      show-details: always
+    clients:
+      access: unrestricted
+  health:
+    redis:
+      enabled: true
+
+tomcat:
+  ajp:
+    enabled: false

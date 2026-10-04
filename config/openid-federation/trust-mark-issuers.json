@@ -1,0 +1,75 @@
+[
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/tmi-loa",
+    "trust-mark-validity-duration": "P365D",
+    "trust-marks": [
+      {
+        "trust-mark-type": "https://id.swedenconnect.se/loa/loa2",
+        "trust-mark-subjects": [
+          {
+            "sub": "https://local.fed.swedenconnect.se:11010",
+            "granted": "2026-10-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "trust-mark-type": "https://id.swedenconnect.se/loa/loa3",
+        "trust-mark-subjects": [
+          {
+            "sub": "https://local.fed.swedenconnect.se:11010",
+            "granted": "2026-10-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "trust-mark-type": "https://id.swedenconnect.se/loa/loa4",
+        "trust-mark-subjects": [
+          {
+            "sub": "https://local.fed.swedenconnect.se:11010",
+            "granted": "2026-10-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "trust-mark-type": "https://id.swedenconnect.se/loa/eidas",
+        "trust-mark-subjects": []
+      },
+      {
+        "trust-mark-type": "https://id.swedenconnect.se/loa/nonresident",
+        "trust-mark-subjects": []
+      }
+    ]
+  },
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/tmi-contracts",
+    "trust-mark-validity-duration": "P365D",
+    "trust-marks": [
+      {
+        "trust-mark-type": "https://id.swedenconnect.se/contract/sc/eid-authorization-system",
+        "trust-mark-subjects": [
+          {
+            "sub": "https://local.fed.swedenconnect.se:11010",
+            "granted": "2026-10-01T00:00:00Z"
+          },
+          {
+            "sub": "https://local.fed.swedenconnect.se:11020/testmyeid",
+            "granted": "2026-10-01T00:00:00Z"
+          },
+          {
+            "sub": "https://local.fed.swedenconnect.se:11030/testrp1",
+            "granted": "2026-10-01T00:00:00Z"
+          }
+        ]
+      },
+      {
+        "trust-mark-type": "https://id.swedenconnect.se/contract/sc/prepaid-auth-2021",
+        "trust-mark-subjects": [
+          {
+            "sub": "https://local.fed.swedenconnect.se:11010",
+            "granted": "2026-10-01T00:00:00Z"
+          }
+        ]
+      }
+    ]
+  }
+]

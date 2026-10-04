@@ -1,0 +1,485 @@
+[
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/trustanchor",
+    "subordinates": [
+      {
+        "entity-identifier": "https://local.fed.swedenconnect.se:11040/im-reg-sc",
+        "jwks": "federation:im-reg-sc",
+        "policy": {
+          "id": "sweden-connect-trust-anchor-policy",
+          "policy": {
+            "openid_relying_party": {
+              "redirect_uris": {
+                "essential": true
+              },
+              "response_types": {
+                "essential": true,
+                "superset_of": ["code"]
+              },
+              "grant_types": {
+                "essential": true,
+                "superset_of": ["authorization_code"]
+              },
+              "token_endpoint_auth_method": {
+                "essential": true,
+                "one_of": ["private_key_jwt"]
+              },
+              "client_uri": {
+                "essential": true
+              },
+              "contacts": {
+                "essential": true
+              },
+              "logo_uri": {
+                "essential": true
+              },
+              "subject_type": {
+                "default": "public",
+                "one_of": ["public", "pairwise"]
+              },
+              "require_auth_time": {
+                "one_of": [true]
+              },
+              "id_token_signing_alg_values_supported": {
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "userinfo_signing_alg_values_supported": {
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "id_token_encrypted_response_alg": {
+                "one_of": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "id_token_encrypted_response_enc": {
+                "one_of": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              },
+              "userinfo_encrypted_response_alg": {
+                "one_of": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "userinfo_encrypted_response_enc": {
+                "one_of": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              },
+              "request_object_signing_alg": {
+                "one_of": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "request_object_encryption_alg": {
+                "one_of": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "request_object_encryption_enc": {
+                "one_of": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              },
+              "token_endpoint_auth_signing_alg": {
+                "one_of": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              }
+            },
+            "openid_provider": {
+              "issuer": {
+                "essential": true
+              },
+              "authorization_endpoint": {
+                "essential": true
+              },
+              "token_endpoint": {
+                "essential": true
+              },
+              "userinfo_endpoint": {
+                "essential": true
+              },
+              "jwks_uri": {
+                "essential": true
+              },
+              "contacts": {
+                "essential": true
+              },
+              "logo_uri": {
+                "essential": true
+              },
+              "scopes_supported": {
+                "essential": true,
+                "superset_of": ["openid"]
+              },
+              "response_types_supported": {
+                "essential": true,
+                "superset_of": ["code"]
+              },
+              "subject_types_supported": {
+                "essential": true,
+                "superset_of": ["public"]
+              },
+              "ui_locales_supported": {
+                "essential": true,
+                "superset_of": ["en", "sv"]
+              },
+              "acr_values_supported": {
+                "essential": true
+              },
+              "claims_supported": {
+                "essential": true
+              },
+              "token_endpoint_auth_methods_supported": {
+                "essential": true,
+                "superset_of": ["private_key_jwt"]
+              },
+              "code_challenge_methods_supported": {
+                "essential": true,
+                "subset_of": ["S256"],
+                "superset_of": ["S256"]
+              },
+              "claims_parameter_supported": {
+                "value": true
+              },
+              "request_parameter_supported": {
+                "value": true
+              },
+              "request_uri_parameter_supported": {
+                "essential": true
+              },
+              "client_registration_types_supported": {
+                "default": ["automatic"]
+              },
+              "id_token_signing_alg_values_supported": {
+                "essential": true,
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "userinfo_signing_alg_values_supported": {
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "request_object_signing_alg_values_supported": {
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "token_endpoint_auth_signing_alg_values_supported": {
+                "essential": true,
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "id_token_encryption_alg_values_supported": {
+                "add": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "id_token_encryption_enc_values_supported": {
+                "add": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              },
+              "userinfo_encryption_alg_values_supported": {
+                "add": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "userinfo_encryption_enc_values_supported": {
+                "add": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              },
+              "request_object_encryption_alg_values_supported": {
+                "add": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "request_object_encryption_enc_values_supported": {
+                "add": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              }
+            }
+          }
+        },
+        "constraints": {
+          "allowed-entity-types": ["openid_relying_party"]
+        }
+      },
+      {
+        "entity-identifier": "https://local.fed.swedenconnect.se:11040/im-reg-sc-op",
+        "jwks": "federation:im-reg-sc-op",
+        "policy": {
+          "id": "sweden-connect-trust-anchor-policy",
+          "policy": {
+            "openid_relying_party": {
+              "redirect_uris": {
+                "essential": true
+              },
+              "response_types": {
+                "essential": true,
+                "superset_of": ["code"]
+              },
+              "grant_types": {
+                "essential": true,
+                "superset_of": ["authorization_code"]
+              },
+              "token_endpoint_auth_method": {
+                "essential": true,
+                "one_of": ["private_key_jwt"]
+              },
+              "client_uri": {
+                "essential": true
+              },
+              "contacts": {
+                "essential": true
+              },
+              "logo_uri": {
+                "essential": true
+              },
+              "subject_type": {
+                "default": "public",
+                "one_of": ["public", "pairwise"]
+              },
+              "require_auth_time": {
+                "one_of": [true]
+              },
+              "id_token_signing_alg_values_supported": {
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "userinfo_signing_alg_values_supported": {
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "id_token_encrypted_response_alg": {
+                "one_of": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "id_token_encrypted_response_enc": {
+                "one_of": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              },
+              "userinfo_encrypted_response_alg": {
+                "one_of": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "userinfo_encrypted_response_enc": {
+                "one_of": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              },
+              "request_object_signing_alg": {
+                "one_of": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "request_object_encryption_alg": {
+                "one_of": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "request_object_encryption_enc": {
+                "one_of": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              },
+              "token_endpoint_auth_signing_alg": {
+                "one_of": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              }
+            },
+            "openid_provider": {
+              "issuer": {
+                "essential": true
+              },
+              "authorization_endpoint": {
+                "essential": true
+              },
+              "token_endpoint": {
+                "essential": true
+              },
+              "userinfo_endpoint": {
+                "essential": true
+              },
+              "jwks_uri": {
+                "essential": true
+              },
+              "contacts": {
+                "essential": true
+              },
+              "logo_uri": {
+                "essential": true
+              },
+              "scopes_supported": {
+                "essential": true,
+                "superset_of": ["openid"]
+              },
+              "response_types_supported": {
+                "essential": true,
+                "superset_of": ["code"]
+              },
+              "subject_types_supported": {
+                "essential": true,
+                "superset_of": ["public"]
+              },
+              "ui_locales_supported": {
+                "essential": true,
+                "superset_of": ["en", "sv"]
+              },
+              "acr_values_supported": {
+                "essential": true
+              },
+              "claims_supported": {
+                "essential": true
+              },
+              "token_endpoint_auth_methods_supported": {
+                "essential": true,
+                "superset_of": ["private_key_jwt"]
+              },
+              "code_challenge_methods_supported": {
+                "essential": true,
+                "subset_of": ["S256"],
+                "superset_of": ["S256"]
+              },
+              "claims_parameter_supported": {
+                "value": true
+              },
+              "request_parameter_supported": {
+                "value": true
+              },
+              "request_uri_parameter_supported": {
+                "essential": true
+              },
+              "client_registration_types_supported": {
+                "default": ["automatic"]
+              },
+              "id_token_signing_alg_values_supported": {
+                "essential": true,
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "userinfo_signing_alg_values_supported": {
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "request_object_signing_alg_values_supported": {
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "token_endpoint_auth_signing_alg_values_supported": {
+                "essential": true,
+                "add": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "id_token_encryption_alg_values_supported": {
+                "add": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "id_token_encryption_enc_values_supported": {
+                "add": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              },
+              "userinfo_encryption_alg_values_supported": {
+                "add": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "userinfo_encryption_enc_values_supported": {
+                "add": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              },
+              "request_object_encryption_alg_values_supported": {
+                "add": ["RSA-OAEP", "RSA-OAEP-256", "ECDH-ES"]
+              },
+              "request_object_encryption_enc_values_supported": {
+                "add": ["A128CBC-HS256", "A256CBC-HS512", "A128GCM", "A256GCM"]
+              }
+            }
+          }
+        },
+        "constraints": {
+          "allowed-entity-types": ["openid_provider"]
+        }
+      },
+      {
+        "entity-identifier": "https://local.fed.swedenconnect.se:11040/tmi-loa",
+        "jwks": "federation:tmi-loa"
+      },
+      {
+        "entity-identifier": "https://local.fed.swedenconnect.se:11040/tmi-contracts",
+        "jwks": "federation:tmi-contracts"
+      }
+    ]
+  },
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/im-reg-sc",
+    "subordinates": [
+      {
+        "entity-identifier": "https://local.fed.swedenconnect.se:11030/testrp1",
+        "jwks": "public:test-client",
+        "metadata": {
+          "openid_relying_party": {
+            "organization_name#sv": "Sweden Connect",
+            "organization_name#en": "Sweden Connect",
+            "organization_name": "Sweden Connect",
+            "organization_identifier": "urn:glue:iso6523:0007:2021006883"
+          }
+        },
+        "policy": {
+          "id": "test-client-testrp1",
+          "policy": {
+            "openid_relying_party": {
+              "display_name#sv": {
+                "value": "Sweden Connect Test-RP 1"
+              },
+              "display_name#en": {
+                "value": "Sweden Connect Test RP 1"
+              },
+              "display_name": {
+                "value": "Sweden Connect Test-RP 1"
+              },
+              "client_name#sv": {
+                "value": "Sweden Connect Test-RP 1"
+              },
+              "client_name#en": {
+                "value": "Sweden Connect Test RP 1"
+              },
+              "client_name": {
+                "value": "Sweden Connect Test-RP 1"
+              },
+              "logo_uri": {
+                "value": "https://local.fed.swedenconnect.se:11030/testrp1/logo.svg"
+              }
+            }
+          }
+        }
+      },
+      {
+        "entity-identifier": "https://local.fed.swedenconnect.se:11020/testmyeid",
+        "jwks": "public:test-my-eid",
+        "metadata": {
+          "openid_relying_party": {
+            "organization_name#sv": "Sweden Connect",
+            "organization_name#en": "Sweden Connect",
+            "organization_name": "Sweden Connect",
+            "organization_identifier": "urn:glue:iso6523:0007:2021006883"
+          }
+        },
+        "policy": {
+          "id": "test-my-eid",
+          "policy": {
+            "openid_relying_party": {
+              "display_name#sv": {
+                "value": "Testa ditt eID"
+              },
+              "display_name#en": {
+                "value": "Test your eID"
+              },
+              "display_name": {
+                "value": "Testa ditt eID"
+              },
+              "client_name#sv": {
+                "value": "Testa ditt eID"
+              },
+              "client_name#en": {
+                "value": "Test your eID"
+              },
+              "client_name": {
+                "value": "Testa ditt eID"
+              },
+              "logo_uri": {
+                "value": "https://local.fed.swedenconnect.se:11020/testmyeid/images/logo.svg"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/im-reg-sc-op",
+    "subordinates": [
+      {
+        "entity-identifier": "https://local.fed.swedenconnect.se:11010",
+        "jwks": "public:reference-authn-server",
+        "metadata": {
+          "openid_provider": {
+            "organization_name#sv": "Sweden Connect",
+            "organization_name#en": "Sweden Connect",
+            "organization_name": "Sweden Connect",
+            "organization_identifier": "urn:glue:iso6523:0007:2021006883"
+          }
+        },
+        "policy": {
+          "id": "reference-authn-server",
+          "policy": {
+            "openid_provider": {
+              "display_name#sv": {
+                "value": "Sweden Connect Referens-OP"
+              },
+              "display_name#en": {
+                "value": "Sweden Connect Reference OP"
+              },
+              "display_name": {
+                "value": "Sweden Connect Referens-OP"
+              },
+              "logo_uri": {
+                "value": "https://local.fed.swedenconnect.se:11010/images/logo-notext.svg"
+              },
+              "acr_values_supported": {
+                "value": ["http://id.elegnamnden.se/loa/1.0/loa3", "http://id.elegnamnden.se/loa/1.0/loa2", "http://id.elegnamnden.se/loa/1.0/loa4"]
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+]

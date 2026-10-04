@@ -1,0 +1,8 @@
+.claude
+.idea
+*.iml
+
+.DS_Store
+
+# Variables of the local installation, see .env.example
+.env

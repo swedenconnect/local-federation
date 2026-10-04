@@ -1,0 +1,73 @@
+[
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/trustanchor",
+    "jwks": "federation:trustanchor",
+    "metadata": {
+      "federation_entity": {
+        "organization_name": "Sweden Connect Local Federation",
+        "federation_fetch_endpoint": "https://local.fed.swedenconnect.se:11040/trustanchor/fetch",
+        "federation_list_endpoint": "https://local.fed.swedenconnect.se:11040/trustanchor/subordinate_listing",
+        "federation_resolve_endpoint": "https://local.fed.swedenconnect.se:11040/trustanchor/resolve",
+        "federation_discovery_endpoint": "https://local.fed.swedenconnect.se:11040/trustanchor/discovery"
+      }
+    }
+  },
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/tmi-loa",
+    "jwks": "federation:tmi-loa",
+    "authority-hints": [
+      "https://local.fed.swedenconnect.se:11040/trustanchor"
+    ],
+    "metadata": {
+      "federation_entity": {
+        "organization_name": "Sweden Connect Local Federation",
+        "federation_trust_mark_endpoint": "https://local.fed.swedenconnect.se:11040/tmi-loa/trust_mark",
+        "federation_trust_mark_status_endpoint": "https://local.fed.swedenconnect.se:11040/tmi-loa/trust_mark_status",
+        "federation_trust_mark_list_endpoint": "https://local.fed.swedenconnect.se:11040/tmi-loa/trust_mark_listing"
+      }
+    }
+  },
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/tmi-contracts",
+    "jwks": "federation:tmi-contracts",
+    "authority-hints": [
+      "https://local.fed.swedenconnect.se:11040/trustanchor"
+    ],
+    "metadata": {
+      "federation_entity": {
+        "organization_name": "Sweden Connect Local Federation",
+        "federation_trust_mark_endpoint": "https://local.fed.swedenconnect.se:11040/tmi-contracts/trust_mark",
+        "federation_trust_mark_status_endpoint": "https://local.fed.swedenconnect.se:11040/tmi-contracts/trust_mark_status",
+        "federation_trust_mark_list_endpoint": "https://local.fed.swedenconnect.se:11040/tmi-contracts/trust_mark_listing"
+      }
+    }
+  },
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/im-reg-sc",
+    "jwks": "federation:im-reg-sc",
+    "authority-hints": [
+      "https://local.fed.swedenconnect.se:11040/trustanchor"
+    ],
+    "metadata": {
+      "federation_entity": {
+        "organization_name": "Sweden Connect Local Federation",
+        "federation_fetch_endpoint": "https://local.fed.swedenconnect.se:11040/im-reg-sc/fetch",
+        "federation_list_endpoint": "https://local.fed.swedenconnect.se:11040/im-reg-sc/subordinate_listing"
+      }
+    }
+  },
+  {
+    "entity-identifier": "https://local.fed.swedenconnect.se:11040/im-reg-sc-op",
+    "jwks": "federation:im-reg-sc-op",
+    "authority-hints": [
+      "https://local.fed.swedenconnect.se:11040/trustanchor"
+    ],
+    "metadata": {
+      "federation_entity": {
+        "organization_name": "Sweden Connect Local Federation",
+        "federation_fetch_endpoint": "https://local.fed.swedenconnect.se:11040/im-reg-sc-op/fetch",
+        "federation_list_endpoint": "https://local.fed.swedenconnect.se:11040/im-reg-sc-op/subordinate_listing"
+      }
+    }
+  }
+]
