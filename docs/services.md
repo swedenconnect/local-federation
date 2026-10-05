@@ -259,6 +259,7 @@ The [OpenID Federation service](https://github.com/swedenconnect/openid-federati
   - https://local.fed.swedenconnect.se:11041/actuator/health – Health.
   - https://local.fed.swedenconnect.se:11041/actuator/ready – Whether the service is ready to serve requests.
   - https://local.fed.swedenconnect.se:11041/actuator/info – The version of the service.
+  - https://local.fed.swedenconnect.se:11041/actuator/dead-nodes – The entities whose entity configuration the resolver could not fetch at its last reading. They stay resolvable with the data from the previous reading until it expires.
 
 **Configuration folder:** [config/openid-federation](../config/openid-federation)
 

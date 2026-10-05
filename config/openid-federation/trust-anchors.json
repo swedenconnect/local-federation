@@ -69,6 +69,12 @@
               },
               "token_endpoint_auth_signing_alg": {
                 "one_of": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "id_token_signed_response_alg": {
+                "value": null
+              },
+              "userinfo_signed_response_alg": {
+                "value": null
               }
             },
             "openid_provider": {
@@ -242,6 +248,12 @@
               },
               "token_endpoint_auth_signing_alg": {
                 "one_of": ["RS256", "RS384", "RS512", "ES256", "ES384", "ES512"]
+              },
+              "id_token_signed_response_alg": {
+                "value": null
+              },
+              "userinfo_signed_response_alg": {
+                "value": null
               }
             },
             "openid_provider": {
@@ -356,7 +368,16 @@
         "entity-identifier": "https://local.fed.swedenconnect.se:11040/tmi-contracts",
         "jwks": "federation:tmi-contracts"
       }
-    ]
+    ],
+    "trust-mark-issuers": {
+      "https://id.swedenconnect.se/loa/loa2": ["https://local.fed.swedenconnect.se:11040/tmi-loa"],
+      "https://id.swedenconnect.se/loa/loa3": ["https://local.fed.swedenconnect.se:11040/tmi-loa"],
+      "https://id.swedenconnect.se/loa/loa4": ["https://local.fed.swedenconnect.se:11040/tmi-loa"],
+      "https://id.swedenconnect.se/loa/eidas": ["https://local.fed.swedenconnect.se:11040/tmi-loa"],
+      "https://id.swedenconnect.se/loa/nonresident": ["https://local.fed.swedenconnect.se:11040/tmi-loa"],
+      "https://id.swedenconnect.se/contract/sc/eid-authorization-system": ["https://local.fed.swedenconnect.se:11040/tmi-contracts"],
+      "https://id.swedenconnect.se/contract/sc/prepaid-auth-2021": ["https://local.fed.swedenconnect.se:11040/tmi-contracts"]
+    }
   },
   {
     "entity-identifier": "https://local.fed.swedenconnect.se:11040/im-reg-sc",

@@ -169,8 +169,6 @@ Test my eID lists the OpenID Providers of the federation on its start page next 
 4. Test my eID shows the claims it received, and the level of assurance.
 5. Click "Sign using Sweden Connect Reference OP" to try a signature approval. The reference authentication server shows the message to sign. Click "Sign", and Test my eID shows the result.
 
-> **Known problem:** Test my eID shows a note that the OpenID Provider does not hold the trust mark for the level of assurance. The OpenID Provider holds it, but the resolve response of the federation leaves it out, see [The registered Sweden Connect services](openid-federation.md#registered-services).
-
 <a name="audit-and-actuator"></a>
 ## Audit entries and the Actuator
 
@@ -257,6 +255,8 @@ The OpenID Federation service runs the published image `ghcr.io/swedenconnect/op
 ```
 OPENID_FEDERATION_IMAGE=ghcr.io/swedenconnect/openid-federation-services:<version>
 ```
+
+The configuration in [config/openid-federation](../config/openid-federation) needs version 1.0.0 or later.
 
 To build the image yourself from the [OpenID Federation service repository](https://github.com/swedenconnect/openid-federation-services), with Java 25 and Maven:
 
