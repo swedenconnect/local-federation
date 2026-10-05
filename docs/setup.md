@@ -96,6 +96,8 @@ docker compose down
 
 The metadata aggregator starts first. The other services wait until it is healthy, and the reference authentication server also waits for Redis. The OpenID Federation service starts on its own. The first start takes a minute or two.
 
+After all services report healthy, it takes up to about half a minute before OpenID Connect logins work. The OpenID Federation service starts before the reference authentication server, Test my eID and the test client, so it cannot read their entity configurations at first. It reads them again every 15 seconds. The reference authentication server and Test my eID try a failed federation lookup again after 15 seconds, and the test client makes its first lookup 30 seconds after it starts.
+
 With a locally built image of the reference authentication server, `docker compose pull` fails for that service, since the image is not in a registry. Pull the others with `docker compose pull --ignore-pull-failures`.
 
 When everything runs, open the [start page](start-page.html) in your browser. It links to every service.
@@ -156,7 +158,7 @@ The reference authentication server is also an OpenID Provider in the [OpenID Fe
 5. Select a person in the reference authentication server, and a level of assurance (`loa2`, `loa3` or `loa4`), and click "Authenticate".
 6. The test client exchanges the code at the token endpoint, calls the UserInfo endpoint, and shows the ID token, the access token and the UserInfo response with the released claims.
 
-If the reference OpenID Provider is not in the list, the test client has not yet found it in the federation. It looks again every ten minutes, or at once after `curl --cacert config/common/tls.crt -X POST https://local.fed.swedenconnect.se:11030/oidc/federation/refresh`. https://local.fed.swedenconnect.se:11030/oidc/federation/info shows what the test client has found.
+If the reference OpenID Provider is not in the list, the test client has not yet found it in the federation. It makes its first lookup 30 seconds after it starts, and then looks again every ten minutes, or at once after `curl --cacert config/common/tls.crt -X POST https://local.fed.swedenconnect.se:11030/oidc/federation/refresh`. https://local.fed.swedenconnect.se:11030/oidc/federation/info shows what the test client has found.
 
 <a name="oidc-login-test-my-eid"></a>
 ## An OpenID Connect login from Test my eID

@@ -106,6 +106,9 @@ rp:
       - entity-id: https://local.fed.swedenconnect.se:11040/im-reg-sc-op
     authority-hints:
       - https://local.fed.swedenconnect.se:11040/im-reg-sc
+    # A failed listing, resolve or trust mark fetch is tried again soon, so that the OpenID Providers are listed
+    # shortly after the local federation has started.
+    retry-interval: 15s
     trust-mark-issuers:
       - entity-id: https://local.fed.swedenconnect.se:11040/tmi-contracts
         trust-mark-types:

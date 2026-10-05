@@ -67,6 +67,8 @@ logging:
   level:
     ROOT: INFO
     se.swedenconnect: INFO
+    # The resolver reloads every 15 seconds (see federation.service.scheduling) and logs each reload at INFO.
+    se.swedenconnect.oidf.service.state.ResolverStateManager: WARN
 
 #
 # The federation keys. Each federation entity has a key of its own in federation-keys.jks (EC P-521). An entity
@@ -181,6 +183,10 @@ federation:
       # END test-client
   service:
     storage: memory
+    # The resolver reads the entity configurations of the services when it starts, which is before the services are
+    # up. A short reload rate lets it find them soon after they have started.
+    scheduling:
+      resolver-reload-rate: PT15S
   routing:
     enabled: true
     mode: IGNORING

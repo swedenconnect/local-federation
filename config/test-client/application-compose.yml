@@ -94,7 +94,13 @@ testclient:
           subordinate-listing-sources:
             - entity-id: https://local.fed.swedenconnect.se:11040/im-reg-sc-op
       auto-configure-ops: true
+      # The test client has no retry for a failed OpenID Provider lookup; a failed one is only tried again at
+      # refresh-interval. The first lookup is therefore made when the federation has had time to find the OpenID
+      # Provider after start-up.
+      initial-refresh-delay: 30s
       refresh-interval: 10m
+      # A trust mark that could not be fetched is tried again soon.
+      trust-mark-retry-interval: 15s
       organization-number: "2021006883"
       entity-metadata:
         organization-name: "Sweden Connect"

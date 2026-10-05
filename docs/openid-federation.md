@@ -268,7 +268,7 @@ A Relying Party that publishes its own entity configuration at `<entity identifi
 
 4. **Restart** the federation service: `docker compose restart openid-federation`.
 
-The Relying Party is now listed by `im-reg-sc`, and its subordinate statement can be fetched. The resolver reads the entity configurations of the subordinates when it starts, one minute later, and then every ten minutes. If the Relying Party was not running at these times, resolving it succeeds after the next reading, or at once after another restart of the federation service. Once read, the Relying Party can be restarted without affecting the federation: if the resolver cannot fetch its entity configuration, it keeps the data it has until that expires.
+The Relying Party is now listed by `im-reg-sc`, and its subordinate statement can be fetched. The resolver reads the entity configurations of the subordinates when it starts, and then every 15 seconds. If the Relying Party was not running then, resolving it succeeds after the next reading. Once read, the Relying Party can be restarted without affecting the federation: if the resolver cannot fetch its entity configuration, it keeps the data it has until that expires.
 
 <a name="adding-hosted-rp"></a>
 ## Adding a Relying Party hosted by the RP Registration Intermediate
@@ -499,7 +499,7 @@ When something is wrong, the federation answers with a JSON error instead of a J
 
 The error codes are those of the specification. `invalid_request` (HTTP 400) is a missing or malformed parameter, `not_found` (HTTP 404) an unknown entity or a trust mark that is not granted, and `invalid_metadata` (HTTP 400) a resolve where the metadata of the entity breaks a metadata policy, for example when a value marked `essential` is missing. A few hints:
 
-- A resolve that fails with "Resolver found no subject" means that the resolver has not read the entity configuration of the entity. Check that the entity publishes it, that it is signed with the key in the subordinate entry, with that key's `kid` in the header, and that it was reachable when the resolver last read it. The resolver reads when the federation service starts, one minute later and then every ten minutes. https://local.fed.swedenconnect.se:11041/actuator/dead-nodes lists the entities it could not fetch at its last reading.
+- A resolve that fails with "Resolver found no subject" means that the resolver has not read the entity configuration of the entity. Check that the entity publishes it, that it is signed with the key in the subordinate entry, with that key's `kid` in the header, and that it was reachable when the resolver last read it. The resolver reads when the federation service starts, and then every 15 seconds. https://local.fed.swedenconnect.se:11041/actuator/dead-nodes lists the entities it could not fetch at its last reading.
 - The log of the federation service shows the errors of the trust chain building: `docker compose logs openid-federation`.
 
 ---

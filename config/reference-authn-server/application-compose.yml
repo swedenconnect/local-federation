@@ -132,6 +132,12 @@ authn-server:
         - type: https://id.swedenconnect.se/contract/sc/prepaid-auth-2021
           issuer: https://local.fed.swedenconnect.se:11040/tmi-contracts
           jwks: file:${COMMON_CONFIG_DIR}/oidf-tmi-contracts.jwks
+      # A failed trust mark fetch, and a client that the federation does not know yet, are tried again soon, so that
+      # the server works shortly after the local federation has started.
+      trust-mark-retry-interval: 15s
+      clients:
+        cache:
+          not-found-time-to-live: 15s
       # The clients, Relying Parties, are resolved through the federation at the trust anchor. No trust marks are
       # required of them.
       trust-anchor:
