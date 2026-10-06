@@ -1,0 +1,33 @@
+# Creates a GitHub release when a version tag is pushed.
+#
+# Nothing is built and no assets are attached - the repository is used by cloning it. The release text is GitHub's
+# generated notes, listing the changes since the previous tag.
+name: Create GitHub release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+# Narrowed to what creating a release requires.
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create release
+    runs-on: ubuntu-latest
+
+    steps:
+      # No checkout is needed - the release is created from the tag that triggered the workflow.
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh release create "${TAG}" \
+            --repo "${REPO}" \
+            --title "${TAG#v}" \
+            --generate-notes \
+            --latest
