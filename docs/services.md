@@ -181,7 +181,7 @@ It is also an OpenID Connect Relying Party that is a member of the [OpenID Feder
 - The SAML signing, encryption and metadata signing keys are in `sp-keys.jks`.
 - **OpenID Connect:** the Relying Party has the entity identifier and client ID `https://local.fed.swedenconnect.se:11020/testmyeid`, and is registered under the RP Registration Intermediate `im-reg-sc`. It uses the SAML signing and encryption keys for OpenID Connect.
 - The federation key that signs its entity configuration is in `federation-key.jks`, see [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services).
-- It trusts the trust anchor with the key in `config/common/oidf-trust-anchor.jwks`, finds the OpenID Providers through `im-reg-sc-op`, and fetches the trust mark `https://id.swedenconnect.se/contract/sc/eid-authorization-system` from `tmi-contracts`.
+- They trust the trust anchor with the key in `config/common/oidf-trust-anchor.jwks`, finds the OpenID Providers through `im-reg-sc-op`, and fetches the trust mark `https://id.swedenconnect.se/contract/sc/eid-authorization-system` from `tmi-contracts`.
 - Every Identity Provider of the metadata feed is offered on the start page.
 
 ---
@@ -191,7 +191,7 @@ It is also an OpenID Connect Relying Party that is a member of the [OpenID Feder
 
 The [Sweden Connect test client](https://github.com/swedenconnect/sweden-connect-test-client) lets you build SAML authentication requests in detail, send them to an Identity Provider and inspect the response and assertion. It acts as two Service Providers: an ordinary Service Provider and a signature service.
 
-It is also an OpenID Connect Relying Party, Test RP 1, that is a member of the [OpenID Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services). It finds the OpenID Providers through the OP Registration Intermediate and resolves them at the trust anchor.
+It also has two OpenID Connect Relying Parties, Test RP 1 and Test RP 2, that are members of the [OpenID Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services). It finds the OpenID Providers through the OP Registration Intermediate and resolves them at the trust anchor.
 
 **Port range:** `11030-11039`
 
@@ -210,7 +210,8 @@ It is also an OpenID Connect Relying Party, Test RP 1, that is a member of the [
 - https://local.fed.swedenconnect.se:11030/saml/metadata/sp1 – The metadata of Test SP 1.
 - https://local.fed.swedenconnect.se:11030/saml/metadata/sign1 – The metadata of Test SignService 1.
 - https://local.fed.swedenconnect.se:11030/testrp1/.well-known/openid-federation – The entity configuration of Test RP 1.
-- https://local.fed.swedenconnect.se:11030/oidc/federation/info – The federation status of the test client: its Relying Party with its trust marks, and the OpenID Providers found in the federation.
+- https://local.fed.swedenconnect.se:11030/testrp2/.well-known/openid-federation – The entity configuration of Test RP 2.
+- https://local.fed.swedenconnect.se:11030/oidc/federation/info – The federation status of the test client: its Relying Parties with their trust marks, and the OpenID Providers found in the federation.
 
 **Configuration folder:** [config/test-client](https://github.com/swedenconnect/local-federation/tree/main/config/test-client)
 
@@ -219,8 +220,10 @@ It is also an OpenID Connect Relying Party, Test RP 1, that is a member of the [
 - [application-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/config/test-client/application-compose.yml) is read with the Spring profile `compose`. The settings are described in [Configuration and Deployment](https://github.com/swedenconnect/sweden-connect-test-client/blob/main/docs/configuration.md).
 - The SAML signing and encryption keys of both Service Providers are in `sp-keys.jks`. The keys that are built into the test client, for testing other key types and sizes, are also available and can be selected in its configuration.
 - The Identity Provider metadata is downloaded from the metadata aggregator. A copy is kept in `cache/`, which is git-ignored.
-- **OpenID Connect:** Test RP 1 has the entity identifier and client ID `https://local.fed.swedenconnect.se:11030/testrp1`, and is registered under the RP Registration Intermediate `im-reg-sc`. It authenticates at the token endpoint with `private_key_jwt`.
-- Its OpenID Connect signing key is in `oidc-keys.jks`, and the federation key that signs its entity configuration in `federation-key.jks`, see [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services).
+- **OpenID Connect:** The test client has two Relying Parties, both registered under the RP Registration Intermediate `im-reg-sc`. The entity identifier is also the client ID. Both authenticate at the token endpoint with `private_key_jwt`.
+  - Test RP 1, `https://local.fed.swedenconnect.se:11030/testrp1` – Public subject identifiers. The ID token and the UserInfo response are signed only.
+  - Test RP 2, `https://local.fed.swedenconnect.se:11030/testrp2` – Pairwise subject identifiers. The ID token and the UserInfo response are encrypted for its RSA key (`RSA-OAEP-256` and `A256GCM`).
+- The OpenID Connect signing key of both, and the encryption key of Test RP 2, are in `oidc-keys.jks`. The federation key that signs their entity configurations is in `federation-key.jks`, see [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services).
 - It trusts the trust anchor with the key in `config/common/oidf-trust-anchor.jwks`, and fetches the trust mark `https://id.swedenconnect.se/contract/sc/eid-authorization-system` from `tmi-contracts`.
 
 ---
@@ -292,10 +295,10 @@ All keys, key stores and certificates are test credentials, committed so that a 
 | `config/common/oidf-trust-anchor.pem`, `.jwk`, `.jwks` and `.crt` | The public key of the trust anchor as a PEM public key, a JWK, a JWK set and a certificate. |
 | `config/common/oidf-tmi-loa.jwks`, `oidf-tmi-contracts.jwks` | The public keys of the two trust mark issuers as JWK sets. |
 | `config/reference-authn-server/oidc-keys.jks` | The OpenID Connect signing key of the reference authentication server, alias `oidc-sign`. |
-| `config/test-client/oidc-keys.jks` | The OpenID Connect signing key of the test client's Test RP 1, alias `oidc-sign`. |
+| `config/test-client/oidc-keys.jks` | The OpenID Connect keys of the test client's Relying Parties: the signing key, alias `oidc-sign`, and Test RP 2's RSA encryption key, alias `oidc-encrypt`. |
 | `config/reference-authn-server/federation-key.jks` | The OpenID Federation key of the reference authentication server, alias `federation`. Its certificate is `federation-key.crt`. |
 | `config/test-my-eid/federation-key.jks` | The OpenID Federation key of Test my eID, alias `federation`. Its certificate is `federation-key.crt`. |
-| `config/test-client/federation-key.jks` | The OpenID Federation key of the test client's Test RP 1, alias `federation`. Its certificate is `federation-key.crt`. |
+| `config/test-client/federation-key.jks` | The OpenID Federation key of the test client's Relying Parties, alias `federation`. Its certificate is `federation-key.crt`. |
 
 ---
 
