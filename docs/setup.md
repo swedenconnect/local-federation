@@ -162,6 +162,8 @@ The reference authentication server is also an OpenID Provider in the [OpenID Fe
 5. Select a person in the reference authentication server, and a level of assurance (`loa2`, `loa3` or `loa4`), and click "Authenticate".
 6. The test client exchanges the code at the token endpoint, calls the UserInfo endpoint, and shows the ID token, the access token and the UserInfo response with the released claims.
 
+Select `https://local.fed.swedenconnect.se:11030/testrp2` in step 2 to use Test RP 2 instead. It uses pairwise subject identifiers, so `sub` differs from the one Test RP 1 gets for the same person, and the reference OpenID Provider encrypts the ID token and the UserInfo response for it. The test client decrypts them and shows how they were protected.
+
 If the reference OpenID Provider is not in the list, the test client has not yet found it in the federation. It makes its first lookup 30 seconds after it starts, and then looks again every ten minutes, or at once after `curl --cacert config/common/tls.crt -X POST https://local.fed.swedenconnect.se:11030/oidc/federation/refresh`. https://local.fed.swedenconnect.se:11030/oidc/federation/info shows what the test client has found.
 
 <a name="oidc-login-test-my-eid"></a>

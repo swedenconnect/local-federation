@@ -64,6 +64,12 @@ credential:
         key:
           alias: oidc-sign
           key-password: secret
+      oidc-encrypt:
+        name: "Test Client OIDC Encryption"
+        store-reference: oidc-keys
+        key:
+          alias: oidc-encrypt
+          key-password: secret
       oidf-federation:
         name: "Test Client Federation Key"
         store-reference: federation-key
@@ -127,7 +133,7 @@ testclient:
             "organization_name#sv" : "Sweden Connect",
             "organization_name#en" : "Sweden Connect",
             "organization_identifier" : "urn:glue:iso6523:0007:2021006883",
-            "subject_type" : "pairwise",
+            "subject_type" : "public",
             "token_endpoint_auth_method" : "private_key_jwt",
             "require_auth_time" : true
           }
@@ -136,6 +142,38 @@ testclient:
             bundle: oidc-sign
           encryption:
             bundle: sp-encrypt
+          metadata:
+            bundle: oidf-federation
+      # https://local.fed.swedenconnect.se:11030/testrp2, registered under im-reg-sc. It uses pairwise subject identifiers
+      # and requires the ID token and the UserInfo response to be encrypted for its RSA encryption key.
+      - path-suffix: "testrp2"
+        description: "Test OIDC RP 2 - RP with pairwise subject identifiers and encrypted ID token and UserInfo"
+        metadata: |
+          {
+            "response_types" : [ "code" ],
+            "grant_types" : [ "authorization_code" ],
+            "client_name" : "Sweden Connect Test-RP 2",
+            "client_name#sv" : "Sweden Connect Test-RP 2",
+            "client_name#en" : "Sweden Connect Test RP 2",
+            "client_uri" : "https://local.fed.swedenconnect.se:11030",
+            "logo_uri" : "<logo>",
+            "contacts" : [ "operations@swedenconnect.se" ],
+            "organization_name#sv" : "Sweden Connect",
+            "organization_name#en" : "Sweden Connect",
+            "organization_identifier" : "urn:glue:iso6523:0007:2021006883",
+            "subject_type" : "pairwise",
+            "token_endpoint_auth_method" : "private_key_jwt",
+            "require_auth_time" : true,
+            "id_token_encrypted_response_alg" : "RSA-OAEP-256",
+            "id_token_encrypted_response_enc" : "A256GCM",
+            "userinfo_encrypted_response_alg" : "RSA-OAEP-256",
+            "userinfo_encrypted_response_enc" : "A256GCM"
+          }
+        credentials:
+          signing:
+            bundle: oidc-sign
+          encryption:
+            bundle: oidc-encrypt
           metadata:
             bundle: oidf-federation
 
