@@ -4,7 +4,7 @@
 
 # Setting up the Local Federation
 
-This walkthrough takes you from a fresh clone of the repository to a first login through the Sweden Connect reference authentication server, which is both a SAML Identity Provider and an OpenID Provider. The services themselves, with their ports and URLs, are described in [Services](services.md), and the OpenID Federation, with how to register your own services in it, in [OpenID Federation in the Local Federation](openid-federation.md).
+This walkthrough takes you from a fresh clone of the repository to a first login through the Sweden Connect reference authentication server, which is both a SAML Identity Provider and an OpenID Provider. The services themselves, with their ports and URLs, are described in [Services](https://docs.swedenconnect.se/local-federation/services.html), and the OpenID Federation, with how to register your own services in it, in [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html).
 
 - [Prerequisites](#prerequisites)
 - [Starting and stopping](#starting-and-stopping)
@@ -51,7 +51,7 @@ echo $GITHUB_ACCESS_TOKEN | docker login ghcr.io -u $GITHUB_USER --password-stdi
 
 ### The `.env` file
 
-Compose reads its variables from a `.env` file next to `docker-compose.yml`. It is git-ignored, and you only need it to change a default. [.env.example](../.env.example) lists every variable with its default:
+Compose reads its variables from a `.env` file next to `docker-compose.yml`. It is git-ignored, and you only need it to change a default. [.env.example](https://github.com/swedenconnect/local-federation/blob/main/.env.example) lists every variable with its default:
 
 | Variable | Description | Default |
 | :--- | :--- | :--- |
@@ -100,12 +100,12 @@ After all services report healthy, it takes up to about half a minute before Ope
 
 With a locally built image of the reference authentication server, `docker compose pull` fails for that service, since the image is not in a registry. Pull the others with `docker compose pull --ignore-pull-failures`.
 
-When everything runs, open the [start page](start-page.html) in your browser. It links to every service.
+When everything runs, open the [start page](https://docs.swedenconnect.se/local-federation/start-page.html) in your browser. It links to every service.
 
 <a name="accepting-the-tls-certificate"></a>
 ## Accepting the TLS certificate
 
-All services use one self-signed TLS certificate for `local.fed.swedenconnect.se`, [config/common/tls.crt](../config/common/tls.crt). Your browser does not trust it, so it shows a warning the first time you open a service.
+All services use one self-signed TLS certificate for `local.fed.swedenconnect.se`, [config/common/tls.crt](https://github.com/swedenconnect/local-federation/blob/main/config/common/tls.crt). Your browser does not trust it, so it shows a warning the first time you open a service.
 
 Accept the certificate **before** you log in. A login moves your browser between several services, and if one of them has a certificate the browser has not accepted, the login stops halfway with a certificate error. Open each of these and accept the warning:
 
@@ -149,7 +149,7 @@ Select `https://local.fed.swedenconnect.se/test-client/sign1` in step 2 to act a
 <a name="oidc-login-test-client"></a>
 ## An OpenID Connect login from the test client
 
-The reference authentication server is also an OpenID Provider in the [OpenID Federation](openid-federation.md). The test client finds it through the federation, and its Relying Party is resolved by the OpenID Provider in the same way, so nothing needs to be registered by hand.
+The reference authentication server is also an OpenID Provider in the [OpenID Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html). The test client finds it through the federation, and its Relying Party is resolved by the OpenID Provider in the same way, so nothing needs to be registered by hand.
 
 1. Open https://local.fed.swedenconnect.se:11030 and select the "OpenID Connect" tab.
 2. Under "Act as Relying Party ...", select `https://local.fed.swedenconnect.se:11030/testrp1`.
@@ -174,7 +174,7 @@ Test my eID lists the OpenID Providers of the federation on its start page next 
 <a name="audit-and-actuator"></a>
 ## Audit entries and the Actuator
 
-The reference authentication server writes an audit event for every step of a login, and for changes of the Service Providers it knows. The events are written to [config/reference-authn-server/audit/audit.log](../config/reference-authn-server/audit), one JSON event per line, on your machine:
+The reference authentication server writes an audit event for every step of a login, and for changes of the Service Providers it knows. The events are written to [config/reference-authn-server/audit/audit.log](https://github.com/swedenconnect/local-federation/tree/main/config/reference-authn-server/audit), one JSON event per line, on your machine:
 
 ```bash
 tail -f config/reference-authn-server/audit/audit.log
@@ -258,7 +258,7 @@ The OpenID Federation service runs the published image `ghcr.io/swedenconnect/op
 OPENID_FEDERATION_IMAGE=ghcr.io/swedenconnect/openid-federation-services:<version>
 ```
 
-The configuration in [config/openid-federation](../config/openid-federation) needs version 1.0.0 or later.
+The configuration in [config/openid-federation](https://github.com/swedenconnect/local-federation/tree/main/config/openid-federation) needs version 1.0.0 or later.
 
 To build the image yourself from the [OpenID Federation service repository](https://github.com/swedenconnect/openid-federation-services), with Java 25 and Maven:
 
@@ -286,12 +286,12 @@ As for the reference authentication server, `docker compose pull` fails for a lo
 <a name="adding-your-own-service"></a>
 ## Adding your own service
 
-This section is about SAML. How to register a Relying Party or OpenID Provider in the OpenID Federation is described in [OpenID Federation in the Local Federation](openid-federation.md).
+This section is about SAML. How to register a Relying Party or OpenID Provider in the OpenID Federation is described in [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html).
 
 To test your own Service Provider against the reference authentication server, it must be part of the federation, and it must trust the federation:
 
-1. Put the SAML metadata of your Service Provider in a file of its own in [config/metadata-aggregator/metadata](../config/metadata-aggregator/metadata), for example `my-sp.xml`. The aggregator reads the files again every minute and adds it to the feed.
-2. Configure your Service Provider to read the Identity Provider metadata from https://local.fed.swedenconnect.se:11000/metadata/mdx/role/idp.xml, and to validate it with [config/common/metadata-signing.crt](../config/common/metadata-signing.crt). If it downloads the metadata over HTTPS, it must also trust [config/common/tls.crt](../config/common/tls.crt), for example through the trust store [config/common/trust.jks](../config/common/trust.jks) (password `secret`).
+1. Put the SAML metadata of your Service Provider in a file of its own in [config/metadata-aggregator/metadata](https://github.com/swedenconnect/local-federation/tree/main/config/metadata-aggregator/metadata), for example `my-sp.xml`. The aggregator reads the files again every minute and adds it to the feed.
+2. Configure your Service Provider to read the Identity Provider metadata from https://local.fed.swedenconnect.se:11000/metadata/mdx/role/idp.xml, and to validate it with [config/common/metadata-signing.crt](https://github.com/swedenconnect/local-federation/blob/main/config/common/metadata-signing.crt). If it downloads the metadata over HTTPS, it must also trust [config/common/tls.crt](https://github.com/swedenconnect/local-federation/blob/main/config/common/tls.crt), for example through the trust store [config/common/trust.jks](https://github.com/swedenconnect/local-federation/blob/main/config/common/trust.jks) (password `secret`).
 3. Send your authentication requests to the Identity Provider `https://local.fed.swedenconnect.se/idp`.
 
 The reference authentication server downloads the metadata feed again within ten minutes. To make it pick up your Service Provider right away, use the `clients` endpoint of its Actuator, see [Audit entries and the Actuator](#audit-and-actuator).
@@ -301,7 +301,7 @@ An Identity Provider of your own is added in the same way, and its metadata then
 <a name="regenerating-keys"></a>
 ## Regenerating keys and certificates
 
-All keys, key stores and certificates are committed, so you never need to generate them to run the federation. If you want new ones, run [scripts/generate-credentials.sh](../scripts/generate-credentials.sh). It uses `keytool`, gives every key store and key the password `secret`, and replaces the existing files:
+All keys, key stores and certificates are committed, so you never need to generate them to run the federation. If you want new ones, run [scripts/generate-credentials.sh](https://github.com/swedenconnect/local-federation/blob/main/scripts/generate-credentials.sh). It uses `keytool`, gives every key store and key the password `secret`, and replaces the existing files:
 
 ```bash
 # Everything
@@ -337,14 +337,14 @@ After new OpenID Federation keys, restart the federation service, and give servi
 docker compose restart openid-federation
 ```
 
-The `federation` target creates `config/openid-federation/federation-keys.jks` anew, so keys that you have added to it yourself, such as the key of a [hosted Relying Party](openid-federation.md#adding-hosted-rp), must be added again.
+The `federation` target creates `config/openid-federation/federation-keys.jks` anew, so keys that you have added to it yourself, such as the key of a [hosted Relying Party](https://docs.swedenconnect.se/local-federation/openid-federation.html#adding-hosted-rp), must be added again.
 
 After a new TLS certificate, accept it again in your browser, see [Accepting the TLS certificate](#accepting-the-tls-certificate).
 
 <a name="refreshing-metadata"></a>
 ## Refreshing the metadata
 
-The metadata aggregator builds its feed from the metadata files in [config/metadata-aggregator/metadata](../config/metadata-aggregator/metadata). The files of the services in this repository are committed. When the configuration or keys of one of these services change, its metadata changes too, and the committed file must be updated. [scripts/refresh-metadata.sh](../scripts/refresh-metadata.sh) fetches the metadata from the running services and updates the files:
+The metadata aggregator builds its feed from the metadata files in [config/metadata-aggregator/metadata](https://github.com/swedenconnect/local-federation/tree/main/config/metadata-aggregator/metadata). The files of the services in this repository are committed. When the configuration or keys of one of these services change, its metadata changes too, and the committed file must be updated. [scripts/refresh-metadata.sh](https://github.com/swedenconnect/local-federation/blob/main/scripts/refresh-metadata.sh) fetches the metadata from the running services and updates the files:
 
 ```bash
 # Every service

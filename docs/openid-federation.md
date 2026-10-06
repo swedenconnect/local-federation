@@ -6,7 +6,7 @@
 
 The local federation runs an OpenID Federation that is built like the Sweden Connect OpenID Federation. It has the same entities, roles, metadata policies and trust mark types, so that you can register your own Relying Parties and OpenID Providers, give them trust marks and test them against the Sweden Connect services before you move on to the Sandbox, QA or production federation.
 
-All federation entities are hosted by one service, the [OpenID Federation service](https://github.com/swedenconnect/openid-federation-services), which reads the federation from JSON files in [config/openid-federation](../config/openid-federation). Registering an entity, or granting a trust mark, means editing a file and restarting the service. The service itself is described in [Services](services.md#openid-federation).
+All federation entities are hosted by one service, the [OpenID Federation service](https://github.com/swedenconnect/openid-federation-services), which reads the federation from JSON files in [config/openid-federation](https://github.com/swedenconnect/local-federation/tree/main/config/openid-federation). Registering an entity, or granting a trust mark, means editing a file and restarting the service. The service itself is described in [Services](https://docs.swedenconnect.se/local-federation/services.html#openid-federation).
 
 - [The federation structure](#structure)
   - [Entities and endpoints](#entities-and-endpoints)
@@ -113,20 +113,20 @@ The trust anchor states which issuer may issue each type in the `trust_mark_issu
 }
 ```
 
-A resolve response only holds the trust marks of an entity that are of a listed type, issued by a listed issuer, valid through the issuer's trust chain to the trust anchor, and reported as `active` by the issuer's trust mark status endpoint. A trust mark that fails any of these checks is left out of the response. The claim is configured in `trust-mark-issuers` of the trust anchor's entry in [trust-anchors.json](../config/openid-federation/trust-anchors.json). A new trust mark type must be added there too, or no resolve response will hold it.
+A resolve response only holds the trust marks of an entity that are of a listed type, issued by a listed issuer, valid through the issuer's trust chain to the trust anchor, and reported as `active` by the issuer's trust mark status endpoint. A trust mark that fails any of these checks is left out of the response. The claim is configured in `trust-mark-issuers` of the trust anchor's entry in [trust-anchors.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/trust-anchors.json). A new trust mark type must be added there too, or no resolve response will hold it.
 
 <a name="trust-anchor-key"></a>
 ### The trust anchor key
 
-The federation key of the trust anchor is published in [config/common](../config/common), in the same three forms that the structure document uses:
+The federation key of the trust anchor is published in [config/common](https://github.com/swedenconnect/local-federation/tree/main/config/common), in the same three forms that the structure document uses:
 
-- [oidf-trust-anchor.pem](../config/common/oidf-trust-anchor.pem) – The public key, PEM encoded.
-- [oidf-trust-anchor.jwk](../config/common/oidf-trust-anchor.jwk) – The public key as a JWK. Its `kid` is the one the trust anchor uses.
-- [oidf-trust-anchor.jwks](../config/common/oidf-trust-anchor.jwks) – The same JWK in a JWK set, for services that want a JWK set.
+- [oidf-trust-anchor.pem](https://github.com/swedenconnect/local-federation/blob/main/config/common/oidf-trust-anchor.pem) – The public key, PEM encoded.
+- [oidf-trust-anchor.jwk](https://github.com/swedenconnect/local-federation/blob/main/config/common/oidf-trust-anchor.jwk) – The public key as a JWK. Its `kid` is the one the trust anchor uses.
+- [oidf-trust-anchor.jwks](https://github.com/swedenconnect/local-federation/blob/main/config/common/oidf-trust-anchor.jwks) – The same JWK in a JWK set, for services that want a JWK set.
 
-- [oidf-trust-anchor.crt](../config/common/oidf-trust-anchor.crt) – A self-signed certificate holding the public key. Only the key in the certificate is of interest, do not configure trust in the certificate itself.
+- [oidf-trust-anchor.crt](https://github.com/swedenconnect/local-federation/blob/main/config/common/oidf-trust-anchor.crt) – A self-signed certificate holding the public key. Only the key in the certificate is of interest, do not configure trust in the certificate itself.
 
-The keys of the two trust mark issuers are published as JWK sets next to it, [oidf-tmi-loa.jwks](../config/common/oidf-tmi-loa.jwks) and [oidf-tmi-contracts.jwks](../config/common/oidf-tmi-contracts.jwks), for services that verify their own trust marks with configured issuer keys.
+The keys of the two trust mark issuers are published as JWK sets next to it, [oidf-tmi-loa.jwks](https://github.com/swedenconnect/local-federation/blob/main/config/common/oidf-tmi-loa.jwks) and [oidf-tmi-contracts.jwks](https://github.com/swedenconnect/local-federation/blob/main/config/common/oidf-tmi-contracts.jwks), for services that verify their own trust marks with configured issuer keys.
 
 Configure this key in your service as the key of the trust anchor. Do not take the key from the trust anchor's own entity configuration, since that offers no protection against a rogue trust anchor.
 
@@ -139,7 +139,7 @@ The same entity names are used in every Sweden Connect environment. Only the bas
 
 | Environment | Base URL of the entity identifiers | Trust anchor key |
 | :--- | :--- | :--- |
-| Local federation | `https://local.fed.swedenconnect.se:11040` | [config/common](../config/common) |
+| Local federation | `https://local.fed.swedenconnect.se:11040` | [config/common](https://github.com/swedenconnect/local-federation/tree/main/config/common) |
 | Sandbox | `https://fed.sandbox.swedenconnect.se` | [Section 5.3.1](https://docs.swedenconnect.se/federation/oidf-structure.html#name-trust-anchor-3) of the structure document |
 | QA | `https://qa.fed.swedenconnect.se` | [Section 5.2.1](https://docs.swedenconnect.se/federation/oidf-structure.html#name-trust-anchor-2) of the structure document |
 | Production | `https://fed.swedenconnect.se` | [Section 5.1.1](https://docs.swedenconnect.se/federation/oidf-structure.html#name-trust-anchor) of the structure document |
@@ -149,7 +149,7 @@ For example, the trust anchor is `https://local.fed.swedenconnect.se:11040/trust
 <a name="configuration-files"></a>
 ## The configuration files
 
-The federation is read from these files in [config/openid-federation](../config/openid-federation) when the service starts. After a change, restart the service:
+The federation is read from these files in [config/openid-federation](https://github.com/swedenconnect/local-federation/tree/main/config/openid-federation) when the service starts. After a change, restart the service:
 
 ```bash
 docker compose restart openid-federation
@@ -157,11 +157,11 @@ docker compose restart openid-federation
 
 | File | Contents |
 | :--- | :--- |
-| [entities.json](../config/openid-federation/entities.json) | The entities that the service hosts: the federation entities and any hosted Relying Parties. Each entry gives the entity identifier, the key it signs with, its authority hints and the metadata of its entity configuration. |
-| [trust-anchors.json](../config/openid-federation/trust-anchors.json) | The trust anchor and the intermediates, each with its subordinates. A subordinate entry is the content of the subordinate statement: the subordinate's federation keys, `metadata`, metadata policy and constraints. The trust anchor's entry also lists the issuers of each trust mark type, see [Trust mark types](#entities-and-endpoints). |
-| [trust-mark-issuers.json](../config/openid-federation/trust-mark-issuers.json) | The two trust mark issuers, their trust mark types and the subjects that hold each type. |
-| [resolvers.json](../config/openid-federation/resolvers.json) | The resolver, which is the trust anchor itself. |
-| [application-compose.yml](../config/openid-federation/application-compose.yml) | The service settings, the federation keys of the federation entities, and the public federation keys of the services that publish their own entity configurations. |
+| [entities.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/entities.json) | The entities that the service hosts: the federation entities and any hosted Relying Parties. Each entry gives the entity identifier, the key it signs with, its authority hints and the metadata of its entity configuration. |
+| [trust-anchors.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/trust-anchors.json) | The trust anchor and the intermediates, each with its subordinates. A subordinate entry is the content of the subordinate statement: the subordinate's federation keys, `metadata`, metadata policy and constraints. The trust anchor's entry also lists the issuers of each trust mark type, see [Trust mark types](#entities-and-endpoints). |
+| [trust-mark-issuers.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/trust-mark-issuers.json) | The two trust mark issuers, their trust mark types and the subjects that hold each type. |
+| [resolvers.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/resolvers.json) | The resolver, which is the trust anchor itself. |
+| [application-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/application-compose.yml) | The service settings, the federation keys of the federation entities, and the public federation keys of the services that publish their own entity configurations. |
 | `federation-keys.jks` | The federation keys of the federation entities, one alias per entity, password `secret`. |
 
 Keys are referenced from the JSON files by name. `federation:<name>` is a key of a federation entity, `hosted:<name>` a key that signs a hosted entity configuration, and `public:<name>` the public key of an entity that publishes its own entity configuration. A misspelled reference stops the service from starting, with a reason that names the file, the entry and the reference, for example `Failed to load file:/opt/openid-federation/trust-anchors.json at $[1].subordinates[0].jwks (entry https://local.fed.swedenconnect.se:11030/testrp1): Key reference 'public:test-clientX' could not be found`. An invalid `ec-location` also stops it. Check the state and the log after a change:
@@ -190,7 +190,7 @@ The metadata policies are those of Section 6 of [Sweden Connect - OpenID Connect
 <a name="registered-services"></a>
 ## The registered Sweden Connect services
 
-The three Sweden Connect services of the local federation are registered, each with a federation key of its own, an EC P-256 key generated by [scripts/generate-credentials.sh](../scripts/generate-credentials.sh):
+The three Sweden Connect services of the local federation are registered, each with a federation key of its own, an EC P-256 key generated by [scripts/generate-credentials.sh](https://github.com/swedenconnect/local-federation/blob/main/scripts/generate-credentials.sh):
 
 | Service | Entity identifier | Registered under | Federation key |
 | :--- | :--- | :--- | :--- |
@@ -213,7 +213,7 @@ The Section 6.2 values are taken from the configuration of each service: the dis
 
 A Relying Party that publishes its own entity configuration at `<entity identifier>/.well-known/openid-federation` is registered under the RP Registration Intermediate. The example registers `https://rp.example.com`.
 
-1. **The federation key.** The Relying Party signs its entity configuration with a federation key of its own, for example an EC P-256 key. Use a key type and size that [Sweden Connect - Security Requirements](https://docs.swedenconnect.se/federation/security-requirements.html) allows. Add the public key to `federation.keys.additional-keys` in [application-compose.yml](../config/openid-federation/application-compose.yml), outside the generated BEGIN and END blocks, either as a PEM certificate or public key, or as a base64-encoded JWK:
+1. **The federation key.** The Relying Party signs its entity configuration with a federation key of its own, for example an EC P-256 key. Use a key type and size that [Sweden Connect - Security Requirements](https://docs.swedenconnect.se/federation/security-requirements.html) allows. Add the public key to `federation.keys.additional-keys` in [application-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/application-compose.yml), outside the generated BEGIN and END blocks, either as a PEM certificate or public key, or as a base64-encoded JWK:
 
    ```yaml
    federation:
@@ -231,7 +231,7 @@ A Relying Party that publishes its own entity configuration at `<entity identifi
 
    The `kid` of the key is its JWK thumbprint (RFC 7638). The `kid` in the header of the Relying Party's entity configuration must be the same.
 
-2. **The subordinate entry.** Add the Relying Party to the subordinates of `https://local.fed.swedenconnect.se:11040/im-reg-sc` in [trust-anchors.json](../config/openid-federation/trust-anchors.json), with the key, the organization in `metadata` and the Section 6.2 values in `policy`:
+2. **The subordinate entry.** Add the Relying Party to the subordinates of `https://local.fed.swedenconnect.se:11040/im-reg-sc` in [trust-anchors.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/trust-anchors.json), with the key, the organization in `metadata` and the Section 6.2 values in `policy`:
 
    ```json
    {
@@ -285,7 +285,7 @@ In this service the hosted entity configuration is built from `entities.json` an
      -sigalg SHA256withECDSA -validity 3650 -dname "CN=Example RP, OU=TEST ONLY"
    ```
 
-   and make it known in [application-compose.yml](../config/openid-federation/application-compose.yml), as a credential bundle mapped for hosted use:
+   and make it known in [application-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/application-compose.yml), as a credential bundle mapped for hosted use:
 
    ```yaml
    credential:
@@ -310,7 +310,7 @@ In this service the hosted entity configuration is built from `entities.json` an
 
    Note that `scripts/generate-credentials.sh federation` recreates `federation-keys.jks` and removes such keys.
 
-2. **The hosted entity configuration.** Add the Relying Party to [entities.json](../config/openid-federation/entities.json). `virtual-entity-id` is the URL it is hosted at, and the entity configuration is served at `<virtual-entity-id>/.well-known/openid-federation`. `metadata` holds the Relying Party's metadata, including its OpenID Connect keys in `jwks` or `jwks_uri`, and must meet the [metadata requirements](https://docs.swedenconnect.se/federation/oidc-metadata-requirements.html):
+2. **The hosted entity configuration.** Add the Relying Party to [entities.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/entities.json). `virtual-entity-id` is the URL it is hosted at, and the entity configuration is served at `<virtual-entity-id>/.well-known/openid-federation`. `metadata` holds the Relying Party's metadata, including its OpenID Connect keys in `jwks` or `jwks_uri`, and must meet the [metadata requirements](https://docs.swedenconnect.se/federation/oidc-metadata-requirements.html):
 
    ```json
    {
@@ -335,7 +335,7 @@ In this service the hosted entity configuration is built from `entities.json` an
    }
    ```
 
-3. **The subordinate entry.** Add the Relying Party to the subordinates of `im-reg-sc` in [trust-anchors.json](../config/openid-federation/trust-anchors.json) as in [the previous section](#adding-rp), with the same `virtual-entity-id` and the hosting key:
+3. **The subordinate entry.** Add the Relying Party to the subordinates of `im-reg-sc` in [trust-anchors.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/trust-anchors.json) as in [the previous section](#adding-rp), with the same `virtual-entity-id` and the hosting key:
 
    ```json
    {
@@ -356,9 +356,9 @@ The hosting specification requires that an intermediate checks that the party as
 <a name="adding-op"></a>
 ## Adding an OpenID Provider
 
-An OpenID Provider is registered under the OP Registration Intermediate, and must publish its own entity configuration. The reference authentication server is registered this way: look at its entry under `im-reg-sc-op` in [trust-anchors.json](../config/openid-federation/trust-anchors.json), its key `reference-authn-server` in [application-compose.yml](../config/openid-federation/application-compose.yml), and the `authn-server.oidc.federation` settings in its own [application-compose.yml](../config/reference-authn-server/application-compose.yml). The steps are those of [Adding a Relying Party that publishes its entity configuration](#adding-rp), with these differences:
+An OpenID Provider is registered under the OP Registration Intermediate, and must publish its own entity configuration. The reference authentication server is registered this way: look at its entry under `im-reg-sc-op` in [trust-anchors.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/trust-anchors.json), its key `reference-authn-server` in [application-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/application-compose.yml), and the `authn-server.oidc.federation` settings in its own [application-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/config/reference-authn-server/application-compose.yml). The steps are those of [Adding a Relying Party that publishes its entity configuration](#adding-rp), with these differences:
 
-- The subordinate entry goes under `https://local.fed.swedenconnect.se:11040/im-reg-sc-op` in [trust-anchors.json](../config/openid-federation/trust-anchors.json).
+- The subordinate entry goes under `https://local.fed.swedenconnect.se:11040/im-reg-sc-op` in [trust-anchors.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/trust-anchors.json).
 - The entity type in `metadata` and `policy` is `openid_provider`.
 - The policy pins `display_name` and `logo_uri`, but not `client_name`.
 - The policy pins `acr_values_supported` to the authentication context URIs that the OpenID Provider is approved for, see Section 3.1.1 of [Registry for identifiers](https://docs.swedenconnect.se/technical-framework/latest/03_-_Registry_for_Identifiers.html). The pinned list replaces what the OpenID Provider declares, so an RP never sees a value the OpenID Provider has not been approved for.
@@ -398,7 +398,7 @@ Grant the OpenID Provider the matching level of assurance trust marks and the co
 <a name="trust-marks"></a>
 ## Granting, renewing and withdrawing trust marks
 
-The trust marks are configured in [trust-mark-issuers.json](../config/openid-federation/trust-mark-issuers.json). Each trust mark type of an issuer has a list of subjects, the entities that hold it. An issuer issues a trust mark on request, to a subject in the list whose grant is in force, and refuses (HTTP 404, error `not_found`) anyone else. Restart the service after a change: `docker compose restart openid-federation`.
+The trust marks are configured in [trust-mark-issuers.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/trust-mark-issuers.json). Each trust mark type of an issuer has a list of subjects, the entities that hold it. An issuer issues a trust mark on request, to a subject in the list whose grant is in force, and refuses (HTTP 404, error `not_found`) anyone else. Restart the service after a change: `docker compose restart openid-federation`.
 
 **Granting.** Add the entity identifier to the subjects of the trust mark type, at the issuer that issues it:
 
@@ -433,16 +433,16 @@ What the metadata of your Relying Party or OpenID Provider must contain is given
 
 | Setting | Value |
 | :--- | :--- |
-| Trust anchor | Entity identifier `https://local.fed.swedenconnect.se:11040/trustanchor`, with the key in [config/common](../config/common), see [The trust anchor key](#trust-anchor-key). |
+| Trust anchor | Entity identifier `https://local.fed.swedenconnect.se:11040/trustanchor`, with the key in [config/common](https://github.com/swedenconnect/local-federation/tree/main/config/common), see [The trust anchor key](#trust-anchor-key). |
 | Authority hints | `https://local.fed.swedenconnect.se:11040/im-reg-sc` for a Relying Party, `https://local.fed.swedenconnect.se:11040/im-reg-sc-op` for an OpenID Provider. |
 | Resolve endpoint | `https://local.fed.swedenconnect.se:11040/trustanchor/resolve`. Resolve responses are signed with the trust anchor key. |
 | Trust mark issuers | `https://local.fed.swedenconnect.se:11040/tmi-loa` for level of assurance trust marks, and `https://local.fed.swedenconnect.se:11040/tmi-contracts` for contract trust marks, as listed in the trust anchor's `trust_mark_issuers`. Their keys are in `config/common/oidf-tmi-loa.jwks` and `config/common/oidf-tmi-contracts.jwks`. A trust mark is fetched with `GET <trust mark endpoint>?trust_mark_type=<type>&sub=<entity identifier>`, and its status checked with `POST <trust mark status endpoint>` and the form parameter `trust_mark=<trust mark>`, see [Entities and endpoints](#entities-and-endpoints). |
 | Finding OpenID Providers | The subordinate listing of the OP Registration Intermediate, `https://local.fed.swedenconnect.se:11040/im-reg-sc-op/subordinate_listing`. Resolve each listed entity at the resolve endpoint to get its metadata. |
 | Finding Relying Parties | The subordinate listing of the RP Registration Intermediate, `https://local.fed.swedenconnect.se:11040/im-reg-sc/subordinate_listing`. |
 | Federation key | A key of the service's own, whose public key you add to the federation, see [Adding a Relying Party that publishes its entity configuration](#adding-rp). |
-| TLS | All endpoints use the self-signed certificate [config/common/tls.crt](../config/common/tls.crt), which the service must trust. A Java service can use the trust store [config/common/trust.jks](../config/common/trust.jks) (password `secret`). |
+| TLS | All endpoints use the self-signed certificate [config/common/tls.crt](https://github.com/swedenconnect/local-federation/blob/main/config/common/tls.crt), which the service must trust. A Java service can use the trust store [config/common/trust.jks](https://github.com/swedenconnect/local-federation/blob/main/config/common/trust.jks) (password `secret`). |
 
-A service that runs in a container must reach `local.fed.swedenconnect.se` on your machine, for example with `extra_hosts: ["local.fed.swedenconnect.se:host-gateway"]` in Docker Compose. A service that runs directly on your machine uses the hosts file entry, see [Setting up the local federation](setup.md#prerequisites). The federation service in turn must reach the entity configuration of your service, so publish it on a URL that resolves from inside a container, which `localhost` does not.
+A service that runs in a container must reach `local.fed.swedenconnect.se` on your machine, for example with `extra_hosts: ["local.fed.swedenconnect.se:host-gateway"]` in Docker Compose. A service that runs directly on your machine uses the hosts file entry, see [Setting up the local federation](https://docs.swedenconnect.se/local-federation/setup.html#prerequisites). The federation service in turn must reach the entity configuration of your service, so publish it on a URL that resolves from inside a container, which `localhost` does not.
 
 <a name="checking"></a>
 ## Checking a registration

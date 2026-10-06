@@ -9,129 +9,174 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light only">
   <title>Sweden Connect Local Federation</title>
   <style>
+    /* Colours, font and layout follow the Sweden Connect Sandbox site (sandbox.swedenconnect.se/home). The page is
+       always bright, it has no dark variant. */
     :root {
-      --bg: #f6f7f9;
-      --card: #ffffff;
-      --border: #d9dee5;
-      --text: #1a1f26;
-      --muted: #5c6773;
-      --link: #0054a6;
-      --accent: #0054a6;
-      --note-bg: #fff8e6;
-      --note-border: #e6c65c;
+      color-scheme: light only;
+      --sc-text: #292a2b;
+      --sc-text-muted: #707070;
+      --sc-outline: #2b2a29;
+      --sc-accent: #5a6751;
+      --sc-accent-light: #657c54;
+      --sc-link-hover: #5a5856;
+      --sc-bg: #ffffff;
+      --sc-bg-frame: #f3f3f3;
+      --sc-bg-offwhite: #eff0ee;
+      --sc-bg-offwhite-alt: #f0efee;
+      --sc-border: #e8e8e8;
+      --sc-terracotta: #cd7a6e;
+      --sc-terracotta-tint: #f7e4e1;
+      --sc-font-family: "Ubuntu", "Helvetica Neue", Arial, sans-serif;
+      --sc-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sc-border-width: 2px;
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #14181d;
-        --card: #1c2229;
-        --border: #2c343d;
-        --text: #e7ebf0;
-        --muted: #9aa5b1;
-        --link: #6ea8e6;
-        --accent: #6ea8e6;
-        --note-bg: #2a2410;
-        --note-border: #6b5a1e;
-      }
-    }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html, body { font-family: var(--sc-font-family); }
     body {
       margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 1.125rem;
+      line-height: 1.5;
+      color: var(--sc-text);
+      background-color: var(--sc-bg-frame);
     }
-    .wrap { max-width: 820px; margin: 0 auto; padding: 32px 16px 64px; }
-    .logo { height: 48px; margin: 0 0 16px; }
-    h1 { font-size: 1.6rem; margin: 0 0 4px; }
-    .sub { color: var(--muted); margin: 0 0 24px; }
-    .note {
-      background: var(--note-bg);
-      border: 1px solid var(--note-border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin: 0 0 28px;
-      font-size: 0.92rem;
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      background-color: var(--sc-bg);
     }
-    .note ul { margin: 8px 0 0; padding-left: 20px; }
-    .note li { margin: 3px 0; }
+    header.navbar { padding: 1rem 2rem; background-color: var(--sc-bg); }
+    .logo { display: block; width: 100%; max-width: 221px; height: auto; }
+    @media (min-width: 768px) { .logo { max-width: 343px; } }
+    main { flex: 1 1 auto; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 0 2rem 2rem; }
+    h1, h2, h3 { color: var(--sc-text); }
+    h1 {
+      margin: 3rem 0 1rem;
+      font-size: clamp(2rem, 6vw, 3rem);
+      line-height: 1.15;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
     h2 {
+      margin: 3rem 0 6px;
+      font-size: clamp(1.5rem, 4.5vw, 2rem);
+      line-height: 1.25;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    p.excerpt { margin: 0 0 1.5rem; font-size: 1.25rem; }
+    a { color: var(--sc-text); text-decoration: underline; }
+    a:hover { color: var(--sc-link-hover); text-decoration: none; }
+    a:focus { box-shadow: none; }
+    a:focus-visible { outline: 3px dotted var(--sc-outline); outline-offset: 3px; }
+    .info-box {
+      margin: 2rem 0;
+      padding: 1.5em 2em;
+      background-color: var(--sc-bg-offwhite);
+      border-left: var(--sc-border-width) solid var(--sc-accent);
+      font-size: 1rem;
+    }
+    .info-box ul { margin: 0.5rem 0 0; padding-left: 20px; }
+    .info-box li + li { margin-top: 8px; }
+    ul.svc { list-style: none; margin: 1.5rem 0 0; padding: 0; border-bottom: var(--sc-border-width) solid var(--sc-border); }
+    ul.svc > li { padding: 1.25rem 0; border-top: var(--sc-border-width) solid var(--sc-border); }
+    ul.svc > li.lead { border-top-color: var(--sc-accent); }
+    h3.name { margin: 0; font-size: 1.25rem; font-weight: 500; line-height: 1.3; }
+    .address {
+      display: inline-block;
+      margin: 0.35rem 0 0.5rem;
+      font-family: var(--sc-mono);
       font-size: 1.05rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 6px;
-      margin: 34px 0 14px;
+      font-weight: 700;
+      color: var(--sc-accent);
+      overflow-wrap: anywhere;
     }
-    ul.svc { list-style: none; margin: 0; padding: 0; }
-    ul.svc > li {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin: 0 0 10px;
-    }
-    ul.svc > li.lead { border-color: var(--accent); border-width: 2px; }
-    .name { font-weight: 600; }
-    .desc { color: var(--muted); font-size: 0.92rem; margin: 2px 0 6px; }
-    ul.links { list-style: none; margin: 0; padding: 0; }
-    ul.links li { margin: 2px 0; font-size: 0.92rem; }
-    ul.links .label { color: var(--muted); }
-    a { color: var(--link); text-decoration: none; word-break: break-all; }
-    a:hover { text-decoration: underline; }
-    .url { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.88rem; }
+    a.address { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+    a.address:hover { color: var(--sc-accent-light); text-decoration: none; }
+    .desc { margin: 0 0 0.5rem; font-size: 1rem; }
+    ul.links { list-style: none; margin: 0; padding: 0; font-size: 0.92rem; }
+    ul.links li { margin: 3px 0; overflow-wrap: anywhere; }
+    ul.links .label { color: var(--sc-text-muted); }
+    .url { font-family: var(--sc-mono); font-size: 0.88rem; }
     code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.88rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 4px;
+      font-family: var(--sc-mono);
+      font-size: 0.88em;
+      background-color: var(--sc-bg-offwhite-alt);
+      border: 1px solid var(--sc-border);
+      border-radius: 2px;
       padding: 0 4px;
+      overflow-wrap: anywhere;
     }
     .tag {
-      display: inline-block; font-size: 0.72rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.03em;
-      padding: 1px 7px; border-radius: 10px; vertical-align: middle;
-      margin-left: 6px; border: 1px solid var(--border); color: var(--muted);
+      display: inline-block;
+      margin-left: 8px;
+      padding: 1px 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      vertical-align: middle;
+      color: var(--sc-text);
+      background-color: var(--sc-terracotta-tint);
+      border-left: var(--sc-border-width) solid var(--sc-terracotta);
     }
-    .cred { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
-    footer { color: var(--muted); font-size: 0.82rem; margin-top: 40px; }
+    .cred { margin-top: 6px; font-size: 0.88rem; color: var(--sc-text-muted); }
+    footer.site-footer {
+      margin-top: 2rem;
+      padding: 2rem;
+      border-top: var(--sc-border-width) solid var(--sc-border);
+      font-size: 0.875rem;
+    }
+    @media (max-width: 575.98px) {
+      header.navbar { padding: 1rem 16px; }
+      .wrap { padding: 0 16px 2rem; }
+      footer.site-footer { padding: 2rem 16px; }
+      .info-box { padding: 1em 1.25em; }
+    }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <img class="logo" src="https://raw.githubusercontent.com/swedenconnect/technical-framework/master/img/sweden-connect.png" alt="Sweden Connect">
-  <h1>Sweden Connect Local Federation</h1>
-  <p class="sub">Links to the services of the local federation.</p>
+<div class="page-container">
+<header class="navbar">
+  <a href="https://www.swedenconnect.se"><img class="logo" src="https://sandbox.swedenconnect.se/home/img/sweden-connect-logo-en.svg" alt="Sweden Connect" width="343" height="59"></a>
+</header>
 
-  <div class="note">
+<main>
+<div class="wrap">
+  <h1>Sweden Connect Local Federation</h1>
+  <p class="excerpt">Links to the services of the local federation.</p>
+
+  <div class="info-box">
     Before you start:
     <ul>
       <li>The links only work while the federation runs (<code>docker compose up -d</code>) and <code>local.fed.swedenconnect.se</code> is mapped to <code>127.0.0.1</code> in your hosts file.</li>
       <li>All HTTPS services use the same self-signed certificate. Open one link per service and accept the browser warning <strong>before</strong> you log in, or a login stops halfway with a certificate error.</li>
-      <li>See <a href="setup.md">Setting up the local federation</a>, <a href="services.md">Services</a> and <a href="openid-federation.md">OpenID Federation in the Local Federation</a> for details.</li>
+      <li>See <a href="https://docs.swedenconnect.se/local-federation/setup.html">Setting up the local federation</a>, <a href="https://docs.swedenconnect.se/local-federation/services.html">Services</a> and <a href="https://docs.swedenconnect.se/local-federation/openid-federation.html">OpenID Federation in the Local Federation</a> for details.</li>
     </ul>
   </div>
 
   <h2>Service Providers and Relying Parties</h2>
   <ul class="svc">
     <li class="lead">
-      <span class="name">Test my eID</span> <span class="tag">start here</span>
-      <div class="desc">Log in with an Identity Provider of the federation and see the attributes it sends. Also tries a signature.</div>
+      <h3 class="name">Test my eID <span class="tag">Start here</span></h3>
+      <a class="address" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11020/testmyeid">https://local.fed.swedenconnect.se:11020/testmyeid</a>
+      <p class="desc">Log in with an Identity Provider of the federation and see the attributes it sends. Also tries a signature.</p>
       <ul class="links">
-        <li><span class="label">Start page:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11020/testmyeid">https://local.fed.swedenconnect.se:11020/testmyeid</a></li>
         <li><span class="label">SP metadata:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11020/testmyeid/metadata">https://local.fed.swedenconnect.se:11020/testmyeid/metadata</a></li>
         <li><span class="label">Signature service metadata:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11020/testmyeid/metadata/sign">https://local.fed.swedenconnect.se:11020/testmyeid/metadata/sign</a></li>
         <li><span class="label">RP entity configuration:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11020/testmyeid/.well-known/openid-federation">https://local.fed.swedenconnect.se:11020/testmyeid/.well-known/openid-federation</a></li>
       </ul>
     </li>
     <li>
-      <span class="name">Sweden Connect test client</span>
-      <div class="desc">Build SAML and OpenID Connect authentication requests in detail and inspect the responses, assertions and tokens.</div>
+      <h3 class="name">Sweden Connect Test Client</h3>
+      <a class="address" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11030">https://local.fed.swedenconnect.se:11030</a>
+      <p class="desc">Build SAML and OpenID Connect authentication requests in detail and inspect the responses, assertions and tokens.</p>
       <ul class="links">
-        <li><span class="label">Start page:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11030">https://local.fed.swedenconnect.se:11030</a></li>
         <li><span class="label">Test SP 1 metadata:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11030/saml/metadata/sp1">https://local.fed.swedenconnect.se:11030/saml/metadata/sp1</a></li>
         <li><span class="label">Test SignService 1 metadata:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11030/saml/metadata/sign1">https://local.fed.swedenconnect.se:11030/saml/metadata/sign1</a></li>
         <li><span class="label">Test RP 1 entity configuration:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11030/testrp1/.well-known/openid-federation">https://local.fed.swedenconnect.se:11030/testrp1/.well-known/openid-federation</a></li>
@@ -143,8 +188,9 @@
   <h2>Identity Providers and OpenID Providers</h2>
   <ul class="svc">
     <li>
-      <span class="name">Sweden Connect reference authentication server</span>
-      <div class="desc">The reference Identity Provider and OpenID Provider, with simulated authentication. SAML entityID <code>https://local.fed.swedenconnect.se/idp</code>, OpenID Connect issuer <code>https://local.fed.swedenconnect.se:11010</code>.</div>
+      <h3 class="name">Sweden Connect Reference Authentication Server</h3>
+      <span class="address">https://local.fed.swedenconnect.se:11010</span>
+      <p class="desc">The reference Identity Provider and OpenID Provider, with simulated authentication. The address is its OpenID Connect issuer. SAML entityID <code>https://local.fed.swedenconnect.se/idp</code>.</p>
       <ul class="links">
         <li><span class="label">IdP metadata:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11010/saml2/metadata">https://local.fed.swedenconnect.se:11010/saml2/metadata</a></li>
         <li><span class="label">OP discovery:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11010/.well-known/openid-configuration">https://local.fed.swedenconnect.se:11010/.well-known/openid-configuration</a></li>
@@ -159,13 +205,13 @@
     </li>
   </ul>
 
-  <h2>Federation metadata</h2>
+  <h2>Federation Metadata</h2>
   <ul class="svc">
     <li>
-      <span class="name">Metadata aggregator</span>
-      <div class="desc">The signed metadata feed of the federation. Validate it with <code>config/common/metadata-signing.crt</code>.</div>
+      <h3 class="name">Metadata Aggregator</h3>
+      <a class="address" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11000/metadata/feed">https://local.fed.swedenconnect.se:11000/metadata/feed</a>
+      <p class="desc">The signed metadata feed of the federation, with all entities. Validate it with <code>config/common/metadata-signing.crt</code>.</p>
       <ul class="links">
-        <li><span class="label">All entities:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11000/metadata/feed">https://local.fed.swedenconnect.se:11000/metadata/feed</a></li>
         <li><span class="label">Identity Providers:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11000/metadata/mdx/role/idp.xml">https://local.fed.swedenconnect.se:11000/metadata/mdx/role/idp.xml</a></li>
         <li><span class="label">Service Providers:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11000/metadata/mdx/role/sp.xml">https://local.fed.swedenconnect.se:11000/metadata/mdx/role/sp.xml</a></li>
       </ul>
@@ -175,8 +221,9 @@
   <h2>OpenID Federation</h2>
   <ul class="svc">
     <li>
-      <span class="name">Trust Anchor</span>
-      <div class="desc">The root of the OpenID Federation, and its resolver. Entity identifier <code>https://local.fed.swedenconnect.se:11040/trustanchor</code>, key in <code>config/common/oidf-trust-anchor.*</code>.</div>
+      <h3 class="name">Trust Anchor</h3>
+      <span class="address">https://local.fed.swedenconnect.se:11040/trustanchor</span>
+      <p class="desc">The root of the OpenID Federation, and its resolver. The address is its entity identifier. Key in <code>config/common/oidf-trust-anchor.*</code>.</p>
       <ul class="links">
         <li><span class="label">Entity configuration:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11040/trustanchor/.well-known/openid-federation">https://local.fed.swedenconnect.se:11040/trustanchor/.well-known/openid-federation</a></li>
         <li><span class="label">Subordinates:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11040/trustanchor/subordinate_listing">https://local.fed.swedenconnect.se:11040/trustanchor/subordinate_listing</a></li>
@@ -185,40 +232,45 @@
       </ul>
     </li>
     <li>
-      <span class="name">RP Registration Intermediate</span>
-      <div class="desc">Registers the Relying Parties. Entity identifier <code>https://local.fed.swedenconnect.se:11040/im-reg-sc</code>.</div>
+      <h3 class="name">RP Registration Intermediate</h3>
+      <span class="address">https://local.fed.swedenconnect.se:11040/im-reg-sc</span>
+      <p class="desc">Registers the Relying Parties. The address is its entity identifier.</p>
       <ul class="links">
         <li><span class="label">Entity configuration:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11040/im-reg-sc/.well-known/openid-federation">https://local.fed.swedenconnect.se:11040/im-reg-sc/.well-known/openid-federation</a></li>
         <li><span class="label">Relying Parties:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11040/im-reg-sc/subordinate_listing">https://local.fed.swedenconnect.se:11040/im-reg-sc/subordinate_listing</a></li>
       </ul>
     </li>
     <li>
-      <span class="name">OP Registration Intermediate</span>
-      <div class="desc">Registers the OpenID Providers. Entity identifier <code>https://local.fed.swedenconnect.se:11040/im-reg-sc-op</code>.</div>
+      <h3 class="name">OP Registration Intermediate</h3>
+      <span class="address">https://local.fed.swedenconnect.se:11040/im-reg-sc-op</span>
+      <p class="desc">Registers the OpenID Providers. The address is its entity identifier.</p>
       <ul class="links">
         <li><span class="label">Entity configuration:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11040/im-reg-sc-op/.well-known/openid-federation">https://local.fed.swedenconnect.se:11040/im-reg-sc-op/.well-known/openid-federation</a></li>
         <li><span class="label">OpenID Providers:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11040/im-reg-sc-op/subordinate_listing">https://local.fed.swedenconnect.se:11040/im-reg-sc-op/subordinate_listing</a></li>
       </ul>
     </li>
     <li>
-      <span class="name">Level of Assurance Trust Mark Issuer</span>
-      <div class="desc">Issues the level of assurance trust marks. Entity identifier <code>https://local.fed.swedenconnect.se:11040/tmi-loa</code>.</div>
+      <h3 class="name">Level of Assurance Trust Mark Issuer</h3>
+      <span class="address">https://local.fed.swedenconnect.se:11040/tmi-loa</span>
+      <p class="desc">Issues the level of assurance trust marks. The address is its entity identifier.</p>
       <ul class="links">
         <li><span class="label">Entity configuration:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11040/tmi-loa/.well-known/openid-federation">https://local.fed.swedenconnect.se:11040/tmi-loa/.well-known/openid-federation</a></li>
         <li><span class="label">Holders of LoA 3:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11040/tmi-loa/trust_mark_listing?trust_mark_type=https://id.swedenconnect.se/loa/loa3">https://local.fed.swedenconnect.se:11040/tmi-loa/trust_mark_listing?trust_mark_type=...</a></li>
       </ul>
     </li>
     <li>
-      <span class="name">Contracts Trust Mark Issuer</span>
-      <div class="desc">Issues the Sweden Connect contract trust marks. Entity identifier <code>https://local.fed.swedenconnect.se:11040/tmi-contracts</code>.</div>
+      <h3 class="name">Contracts Trust Mark Issuer</h3>
+      <span class="address">https://local.fed.swedenconnect.se:11040/tmi-contracts</span>
+      <p class="desc">Issues the Sweden Connect contract trust marks. The address is its entity identifier.</p>
       <ul class="links">
         <li><span class="label">Entity configuration:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11040/tmi-contracts/.well-known/openid-federation">https://local.fed.swedenconnect.se:11040/tmi-contracts/.well-known/openid-federation</a></li>
         <li><span class="label">Holders of eid-authorization-system:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11040/tmi-contracts/trust_mark_listing?trust_mark_type=https://id.swedenconnect.se/contract/sc/eid-authorization-system">https://local.fed.swedenconnect.se:11040/tmi-contracts/trust_mark_listing?trust_mark_type=...</a></li>
       </ul>
     </li>
     <li>
-      <span class="name">OpenID Federation service</span>
-      <div class="desc">The service that hosts the entities above. See <a href="openid-federation.md">OpenID Federation in the Local Federation</a>.</div>
+      <h3 class="name">OpenID Federation Service</h3>
+      <span class="address">https://local.fed.swedenconnect.se:11040</span>
+      <p class="desc">The service that hosts the entities above. See <a href="https://docs.swedenconnect.se/local-federation/openid-federation.html">OpenID Federation in the Local Federation</a>.</p>
       <ul class="links">
         <li><span class="label">Health:</span> <a class="url" target="_blank" rel="noopener" href="https://local.fed.swedenconnect.se:11041/actuator/health">https://local.fed.swedenconnect.se:11041/actuator/health</a></li>
       </ul>
@@ -226,21 +278,24 @@
     </li>
   </ul>
 
-  <h2>Base services</h2>
+  <h2>Base Services</h2>
   <ul class="svc">
     <li>
-      <span class="name">Redis</span>
-      <div class="desc">Holds the sessions and stores of the reference authentication server. The server itself is at <code>local.fed.swedenconnect.se:10900</code>.</div>
+      <h3 class="name">Redis</h3>
+      <span class="address">local.fed.swedenconnect.se:10900</span>
+      <p class="desc">Holds the sessions and stores of the reference authentication server.</p>
       <ul class="links">
         <li><span class="label">RedisInsight:</span> <a class="url" target="_blank" rel="noopener" href="http://local.fed.swedenconnect.se:10901">http://local.fed.swedenconnect.se:10901</a></li>
       </ul>
       <div class="cred">Password: <code>supersecret</code> (or <code>REDIS_PASSWORD</code> in <code>.env</code>)</div>
     </li>
   </ul>
+</div>
+</main>
 
-  <footer>
-    Copyright &copy; 2026, <a href="https://www.swedenconnect.se">Sweden Connect</a>. Licensed under version 2.0 of the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License</a>.
-  </footer>
+<footer class="site-footer">
+  Copyright &copy; 2026, <a href="https://www.swedenconnect.se">Sweden Connect</a>. Licensed under version 2.0 of the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License</a>.
+</footer>
 </div>
 </body>
 </html>

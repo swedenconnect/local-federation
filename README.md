@@ -26,16 +26,16 @@ For OpenID Connect, it runs an OpenID Federation built like the Sweden Connect O
    docker compose up -d
    ```
 
-3. Open the [start page](docs/start-page.html) in your browser and accept the self-signed certificate of `local.fed.swedenconnect.se`.
+3. Open the [start page](https://docs.swedenconnect.se/local-federation/start-page.html) in your browser and accept the self-signed certificate of `local.fed.swedenconnect.se`.
 
-The [setup walkthrough](docs/setup.md) describes each step in detail, including what to do if the reference authentication server image is not available.
+The [setup walkthrough](https://docs.swedenconnect.se/local-federation/setup.html) describes each step in detail, including what to do if the reference authentication server image is not available.
 
 ## Documentation
 
-- [Setting up the local federation](docs/setup.md) – Prerequisites, starting and stopping, a first login, audit entries, local builds of the reference authentication server and the OpenID Federation service, regenerating keys and refreshing metadata.
-- [Services](docs/services.md) – Each service with its ports, URLs and configuration folder.
-- [OpenID Federation](docs/openid-federation.md) – The structure of the OpenID Federation, registering your own Relying Parties and OpenID Providers, granting trust marks, and checking a registration.
-- [Start page](docs/start-page.html) – An HTML page with links to every service. Open it directly from disk.
+- [Setting up the local federation](https://docs.swedenconnect.se/local-federation/setup.html) – Prerequisites, starting and stopping, a first login, audit entries, local builds of the reference authentication server and the OpenID Federation service, regenerating keys and refreshing metadata.
+- [Services](https://docs.swedenconnect.se/local-federation/services.html) – Each service with its ports, URLs and configuration folder.
+- [OpenID Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html) – The structure of the OpenID Federation, registering your own Relying Parties and OpenID Providers, granting trust marks, and checking a registration.
+- [Start page](https://docs.swedenconnect.se/local-federation/start-page.html) – An HTML page with links to every service.
 
 ---
 

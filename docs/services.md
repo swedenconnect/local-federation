@@ -4,7 +4,7 @@
 
 # Services of the Local Federation
 
-This is the reference for the services in [docker-compose.yml](../docker-compose.yml): what each service is for, its ports, URLs and configuration folder. How to set up the federation is described in [Setting up the local federation](setup.md), and the OpenID Federation in [OpenID Federation in the Local Federation](openid-federation.md).
+This is the reference for the services in [docker-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/docker-compose.yml): what each service is for, its ports, URLs and configuration folder. How to set up the federation is described in [Setting up the local federation](https://docs.swedenconnect.se/local-federation/setup.html), and the OpenID Federation in [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html).
 
 All services are reached through the host name `local.fed.swedenconnect.se`, which you map to `127.0.0.1` in your hosts file. The containers reach each other through the same host name, so every URL below works both from your browser and from the services themselves. All HTTPS endpoints use the same self-signed certificate, see [Keys and certificates](#keys-and-certificates).
 
@@ -58,7 +58,7 @@ A [Redis Stack](https://redis.io/docs/latest/operate/oss_and_stack/) server, wit
 - `local.fed.swedenconnect.se:10900` – The Redis server. The password is `supersecret`, unless you set `REDIS_PASSWORD` in `.env`.
 - http://local.fed.swedenconnect.se:10901 – RedisInsight. If it does not list the database, add one with host `localhost`, port `6379` and the password above.
 
-**Configuration folder:** None. The password is set by `REDIS_PASSWORD`, see [.env.example](../.env.example).
+**Configuration folder:** None. The password is set by `REDIS_PASSWORD`, see [.env.example](https://github.com/swedenconnect/local-federation/blob/main/.env.example).
 
 The services inside Docker Compose reach Redis as `redis:6379`. An application that shares this Redis must use key names of its own. The reference authentication server writes all its keys under the prefix `reference-authn-server`.
 
@@ -84,13 +84,13 @@ Publishes the SAML metadata of the federation: one feed, signed with the federat
 - https://local.fed.swedenconnect.se:11000/metadata/mdx/role/idp.xml – The Identity Providers.
 - https://local.fed.swedenconnect.se:11000/metadata/mdx/role/sp.xml – The Service Providers.
 
-**Configuration folder:** [config/metadata-aggregator](../config/metadata-aggregator)
+**Configuration folder:** [config/metadata-aggregator](https://github.com/swedenconnect/local-federation/tree/main/config/metadata-aggregator)
 
 **Configuration details:**
 
-- The feed is built from the entity metadata files in [config/metadata-aggregator/metadata](../config/metadata-aggregator/metadata), one file per entity. The aggregator reads the files again every minute.
-- To add your own Service Provider or Identity Provider to the federation, put its metadata in a file of its own in that folder, see [Adding your own service](setup.md#adding-your-own-service).
-- The feed is signed with the key in `metadata-signing.jks`. The certificate that validates the signature is [config/common/metadata-signing.crt](../config/common/metadata-signing.crt).
+- The feed is built from the entity metadata files in [config/metadata-aggregator/metadata](https://github.com/swedenconnect/local-federation/tree/main/config/metadata-aggregator/metadata), one file per entity. The aggregator reads the files again every minute.
+- To add your own Service Provider or Identity Provider to the federation, put its metadata in a file of its own in that folder, see [Adding your own service](https://docs.swedenconnect.se/local-federation/setup.html#adding-your-own-service).
+- The feed is signed with the key in `metadata-signing.jks`. The certificate that validates the signature is [config/common/metadata-signing.crt](https://github.com/swedenconnect/local-federation/blob/main/config/common/metadata-signing.crt).
 - The feed has a `cacheDuration` of ten minutes and is valid for seven days.
 
 ---
@@ -100,7 +100,7 @@ Publishes the SAML metadata of the federation: one feed, signed with the federat
 
 The [Sweden Connect reference authentication server](https://github.com/swedenconnect/spring-authentication-server/tree/main/sweden-connect-reference), a SAML Identity Provider and OpenID Provider built on the [Spring Authentication Server](https://docs.swedenconnect.se/spring-authentication-server/). The authentication is simulated: you pick a person from a list instead of authenticating, while everything around the authentication follows the [Swedish eID Framework](https://docs.swedenconnect.se/technical-framework/) as a production Identity Provider does. It also serves signature services.
 
-The OpenID Provider is a member of the [OpenID Federation](openid-federation.md#registered-services). It accepts every Relying Party that the federation resolves, without requiring any trust marks of it.
+The OpenID Provider is a member of the [OpenID Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services). It accepts every Relying Party that the federation resolves, without requiring any trust marks of it.
 
 **Port range:** `11010-11019`
 
@@ -128,14 +128,14 @@ The OpenID Provider is a member of the [OpenID Federation](openid-federation.md#
   - https://local.fed.swedenconnect.se:11011/actuator/auditevents – The audit events kept in memory.
   - https://local.fed.swedenconnect.se:11011/actuator/clients – The Service Providers and OpenID Connect clients that the server knows. The update operations are allowed, see [Monitoring and managing the server](https://docs.swedenconnect.se/spring-authentication-server/management.html#the-clients-endpoint).
 
-**Configuration folder:** [config/reference-authn-server](../config/reference-authn-server)
+**Configuration folder:** [config/reference-authn-server](https://github.com/swedenconnect/local-federation/tree/main/config/reference-authn-server)
 
 **Configuration details:**
 
-- The image is set by `REFERENCE_AUTHN_SERVER_IMAGE` in `.env`, see [Using a local build of the reference authentication server](setup.md#local-build).
-- [application-compose.yml](../config/reference-authn-server/application-compose.yml) supplies what the default configuration of the service leaves to the deployment. It is read with the Spring profile `compose`. The settings are described in the [README of the service](https://github.com/swedenconnect/spring-authentication-server/tree/main/sweden-connect-reference).
+- The image is set by `REFERENCE_AUTHN_SERVER_IMAGE` in `.env`, see [Using a local build of the reference authentication server](https://docs.swedenconnect.se/local-federation/setup.html#local-build).
+- [application-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/config/reference-authn-server/application-compose.yml) supplies what the default configuration of the service leaves to the deployment. It is read with the Spring profile `compose`. The settings are described in the [README of the service](https://github.com/swedenconnect/spring-authentication-server/tree/main/sweden-connect-reference).
 - The SAML signing and encryption keys are in `saml-keys.jks`.
-- **OpenID Connect:** the OpenID Connect signing key is in `oidc-keys.jks`, and the federation key that signs the entity configuration in `federation-key.jks`, see [OpenID Federation in the Local Federation](openid-federation.md#registered-services).
+- **OpenID Connect:** the OpenID Connect signing key is in `oidc-keys.jks`, and the federation key that signs the entity configuration in `federation-key.jks`, see [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services).
 - The OpenID Provider is registered under the OP Registration Intermediate `im-reg-sc-op`. It fetches its trust marks, `loa2`, `loa3` and `loa4` from `tmi-loa` and both contract trust marks from `tmi-contracts`, and verifies them with the keys of the issuers in `config/common/oidf-tmi-loa.jwks` and `config/common/oidf-tmi-contracts.jwks`.
 - Its clients are resolved through the federation, at the resolve endpoint of the trust anchor, verified with the key in `config/common/oidf-trust-anchor.jwks`. No clients are configured in the server itself.
 - The OpenID Connect codes, tokens, federation cache and trust marks are kept in [Redis](#redis), like the rest of its state.
@@ -151,7 +151,7 @@ The OpenID Provider is a member of the [OpenID Federation](openid-federation.md#
 
 [Test my eID](https://github.com/swedenconnect/test-my-eid) is a Service Provider that lets a user log in with any Identity Provider of the federation and shows the attributes it received. After a login, the user can also sign a test message through the simulated signature service that is part of the application, which has an entityID of its own.
 
-It is also an OpenID Connect Relying Party that is a member of the [OpenID Federation](openid-federation.md#registered-services). It lists the OpenID Providers of the federation on its start page, next to the SAML Identity Providers, and offers signature approval after an OpenID Connect login.
+It is also an OpenID Connect Relying Party that is a member of the [OpenID Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services). It lists the OpenID Providers of the federation on its start page, next to the SAML Identity Providers, and offers signature approval after an OpenID Connect login.
 
 **Port range:** `11020-11029`
 
@@ -172,15 +172,15 @@ It is also an OpenID Connect Relying Party that is a member of the [OpenID Feder
 - https://local.fed.swedenconnect.se:11020/testmyeid/.well-known/openid-federation – The entity configuration of the Relying Party.
 - https://local.fed.swedenconnect.se:11020/testmyeid/oidc/metadata – The metadata of the Relying Party as JSON.
 
-**Configuration folder:** [config/test-my-eid](../config/test-my-eid)
+**Configuration folder:** [config/test-my-eid](https://github.com/swedenconnect/local-federation/tree/main/config/test-my-eid)
 
 **Configuration details:**
 
-- The image is set by `TEST_MY_EID_IMAGE` in `.env`, see [Using a local build of Test my eID](setup.md#test-my-eid-build).
-- [application-compose.yml](../config/test-my-eid/application-compose.yml) is read with the Spring profile `compose`. The settings are described in the [README of Test my eID](https://github.com/swedenconnect/test-my-eid#configuration-settings).
+- The image is set by `TEST_MY_EID_IMAGE` in `.env`, see [Using a local build of Test my eID](https://docs.swedenconnect.se/local-federation/setup.html#test-my-eid-build).
+- [application-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/config/test-my-eid/application-compose.yml) is read with the Spring profile `compose`. The settings are described in the [README of Test my eID](https://github.com/swedenconnect/test-my-eid#configuration-settings).
 - The SAML signing, encryption and metadata signing keys are in `sp-keys.jks`.
 - **OpenID Connect:** the Relying Party has the entity identifier and client ID `https://local.fed.swedenconnect.se:11020/testmyeid`, and is registered under the RP Registration Intermediate `im-reg-sc`. It uses the SAML signing and encryption keys for OpenID Connect.
-- The federation key that signs its entity configuration is in `federation-key.jks`, see [OpenID Federation in the Local Federation](openid-federation.md#registered-services).
+- The federation key that signs its entity configuration is in `federation-key.jks`, see [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services).
 - It trusts the trust anchor with the key in `config/common/oidf-trust-anchor.jwks`, finds the OpenID Providers through `im-reg-sc-op`, and fetches the trust mark `https://id.swedenconnect.se/contract/sc/eid-authorization-system` from `tmi-contracts`.
 - Every Identity Provider of the metadata feed is offered on the start page.
 
@@ -191,7 +191,7 @@ It is also an OpenID Connect Relying Party that is a member of the [OpenID Feder
 
 The [Sweden Connect test client](https://github.com/swedenconnect/sweden-connect-test-client) lets you build SAML authentication requests in detail, send them to an Identity Provider and inspect the response and assertion. It acts as two Service Providers: an ordinary Service Provider and a signature service.
 
-It is also an OpenID Connect Relying Party, Test RP 1, that is a member of the [OpenID Federation](openid-federation.md#registered-services). It finds the OpenID Providers through the OP Registration Intermediate and resolves them at the trust anchor.
+It is also an OpenID Connect Relying Party, Test RP 1, that is a member of the [OpenID Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services). It finds the OpenID Providers through the OP Registration Intermediate and resolves them at the trust anchor.
 
 **Port range:** `11030-11039`
 
@@ -212,15 +212,15 @@ It is also an OpenID Connect Relying Party, Test RP 1, that is a member of the [
 - https://local.fed.swedenconnect.se:11030/testrp1/.well-known/openid-federation – The entity configuration of Test RP 1.
 - https://local.fed.swedenconnect.se:11030/oidc/federation/info – The federation status of the test client: its Relying Party with its trust marks, and the OpenID Providers found in the federation.
 
-**Configuration folder:** [config/test-client](../config/test-client)
+**Configuration folder:** [config/test-client](https://github.com/swedenconnect/local-federation/tree/main/config/test-client)
 
 **Configuration details:**
 
-- [application-compose.yml](../config/test-client/application-compose.yml) is read with the Spring profile `compose`. The settings are described in [Configuration and Deployment](https://github.com/swedenconnect/sweden-connect-test-client/blob/main/docs/configuration.md).
+- [application-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/config/test-client/application-compose.yml) is read with the Spring profile `compose`. The settings are described in [Configuration and Deployment](https://github.com/swedenconnect/sweden-connect-test-client/blob/main/docs/configuration.md).
 - The SAML signing and encryption keys of both Service Providers are in `sp-keys.jks`. The keys that are built into the test client, for testing other key types and sizes, are also available and can be selected in its configuration.
 - The Identity Provider metadata is downloaded from the metadata aggregator. A copy is kept in `cache/`, which is git-ignored.
 - **OpenID Connect:** Test RP 1 has the entity identifier and client ID `https://local.fed.swedenconnect.se:11030/testrp1`, and is registered under the RP Registration Intermediate `im-reg-sc`. It authenticates at the token endpoint with `private_key_jwt`.
-- Its OpenID Connect signing key is in `oidc-keys.jks`, and the federation key that signs its entity configuration in `federation-key.jks`, see [OpenID Federation in the Local Federation](openid-federation.md#registered-services).
+- Its OpenID Connect signing key is in `oidc-keys.jks`, and the federation key that signs its entity configuration in `federation-key.jks`, see [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services).
 - It trusts the trust anchor with the key in `config/common/oidf-trust-anchor.jwks`, and fetches the trust mark `https://id.swedenconnect.se/contract/sc/eid-authorization-system` from `tmi-contracts`.
 
 ---
@@ -228,7 +228,7 @@ It is also an OpenID Connect Relying Party, Test RP 1, that is a member of the [
 <a name="openid-federation"></a>
 ### OpenID Federation
 
-The [OpenID Federation service](https://github.com/swedenconnect/openid-federation-services) hosts all entities of the local OpenID Federation: the trust anchor, which is also the resolver, the two trust mark issuers and the two registration intermediates. The federation is built like the Sweden Connect OpenID Federation, and is described in [OpenID Federation in the Local Federation](openid-federation.md).
+The [OpenID Federation service](https://github.com/swedenconnect/openid-federation-services) hosts all entities of the local OpenID Federation: the trust anchor, which is also the resolver, the two trust mark issuers and the two registration intermediates. The federation is built like the Sweden Connect OpenID Federation, and is described in [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html).
 
 **Port range:** `11040-11049`
 
@@ -254,21 +254,21 @@ The [OpenID Federation service](https://github.com/swedenconnect/openid-federati
 - https://local.fed.swedenconnect.se:11040/trustanchor/discovery?trust_anchor=https://local.fed.swedenconnect.se:11040/trustanchor – The entities of the federation.
 - https://local.fed.swedenconnect.se:11040/im-reg-sc/subordinate_listing – The registered Relying Parties.
 - https://local.fed.swedenconnect.se:11040/im-reg-sc-op/subordinate_listing – The registered OpenID Providers.
-- https://local.fed.swedenconnect.se:11040/tmi-loa/trust_mark?trust_mark_type=&sub= – Issues a level of assurance trust mark. The other trust mark endpoints of both issuers are listed in [Entities and endpoints](openid-federation.md#entities-and-endpoints).
+- https://local.fed.swedenconnect.se:11040/tmi-loa/trust_mark?trust_mark_type=&sub= – Issues a level of assurance trust mark. The other trust mark endpoints of both issuers are listed in [Entities and endpoints](https://docs.swedenconnect.se/local-federation/openid-federation.html#entities-and-endpoints).
 - https://local.fed.swedenconnect.se:11041/actuator – The Actuator. All endpoints are exposed, among them:
   - https://local.fed.swedenconnect.se:11041/actuator/health – Health.
   - https://local.fed.swedenconnect.se:11041/actuator/ready – Whether the service is ready to serve requests.
   - https://local.fed.swedenconnect.se:11041/actuator/info – The version of the service.
   - https://local.fed.swedenconnect.se:11041/actuator/dead-nodes – The entities whose entity configuration the resolver could not fetch at its last reading. They stay resolvable with the data from the previous reading until it expires.
 
-**Configuration folder:** [config/openid-federation](../config/openid-federation)
+**Configuration folder:** [config/openid-federation](https://github.com/swedenconnect/local-federation/tree/main/config/openid-federation)
 
 **Configuration details:**
 
-- The image is set by `OPENID_FEDERATION_IMAGE` in `.env`, see [Using another image of the OpenID Federation service](setup.md#federation-image).
-- [application-compose.yml](../config/openid-federation/application-compose.yml) holds the settings of the service, and is read with the Spring profile `compose`. The settings are described in [Service Configuration](https://github.com/swedenconnect/openid-federation-services/blob/main/docs/service-configuration.md).
-- The entities, the trust anchor and intermediates with their subordinates, the trust mark issuers and the resolver are read from the JSON files in the folder when the service starts, see [The configuration files](openid-federation.md#configuration-files). After a change, restart the service with `docker compose restart openid-federation`.
-- The federation keys of the federation entities are in `federation-keys.jks`, one EC P-521 key per entity. The public key of the trust anchor is published in `config/common`, see [The trust anchor key](openid-federation.md#trust-anchor-key).
+- The image is set by `OPENID_FEDERATION_IMAGE` in `.env`, see [Using another image of the OpenID Federation service](https://docs.swedenconnect.se/local-federation/setup.html#federation-image).
+- [application-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/application-compose.yml) holds the settings of the service, and is read with the Spring profile `compose`. The settings are described in [Service Configuration](https://github.com/swedenconnect/openid-federation-services/blob/main/docs/service-configuration.md).
+- The entities, the trust anchor and intermediates with their subordinates, the trust mark issuers and the resolver are read from the JSON files in the folder when the service starts, see [The configuration files](https://docs.swedenconnect.se/local-federation/openid-federation.html#configuration-files). After a change, restart the service with `docker compose restart openid-federation`.
+- The federation keys of the federation entities are in `federation-keys.jks`, one EC P-521 key per entity. The public key of the trust anchor is published in `config/common`, see [The trust anchor key](https://docs.swedenconnect.se/local-federation/openid-federation.html#trust-anchor-key).
 - The state is kept in memory. Tracing is turned off.
 
 ---
@@ -276,7 +276,7 @@ The [OpenID Federation service](https://github.com/swedenconnect/openid-federati
 <a name="keys-and-certificates"></a>
 ## Keys and certificates
 
-All keys, key stores and certificates are test credentials, committed so that a fresh clone runs without extra steps. The password of every key store and key is `secret`. [scripts/generate-credentials.sh](../scripts/generate-credentials.sh) generates them, see [Regenerating keys and certificates](setup.md#regenerating-keys).
+All keys, key stores and certificates are test credentials, committed so that a fresh clone runs without extra steps. The password of every key store and key is `secret`. [scripts/generate-credentials.sh](https://github.com/swedenconnect/local-federation/blob/main/scripts/generate-credentials.sh) generates them, see [Regenerating keys and certificates](https://docs.swedenconnect.se/local-federation/setup.html#regenerating-keys).
 
 | File | Contents |
 | :--- | :--- |
