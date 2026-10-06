@@ -164,6 +164,8 @@ The reference authentication server is also an OpenID Provider in the [OpenID Fe
 
 Select `https://local.fed.swedenconnect.se:11030/testrp2` in step 2 to use Test RP 2 instead. It uses pairwise subject identifiers, so `sub` differs from the one Test RP 1 gets for the same person, and the reference OpenID Provider encrypts the ID token and the UserInfo response for it. The test client decrypts them and shows how they were protected.
 
+Test RP 3, `https://local.fed.swedenconnect.se:11030/testrp3`, uses EC keys only. It has two active signing keys, and you can choose which one signs the client assertion and the request object under "Key options" when you build the request. The ID token and the UserInfo response are encrypted for its EC key.
+
 If the reference OpenID Provider is not in the list, the test client has not yet found it in the federation. It makes its first lookup 30 seconds after it starts, and then looks again every ten minutes, or at once after `curl --cacert config/common/tls.crt -X POST https://local.fed.swedenconnect.se:11030/oidc/federation/refresh`. https://local.fed.swedenconnect.se:11030/oidc/federation/info shows what the test client has found.
 
 <a name="oidc-login-test-my-eid"></a>

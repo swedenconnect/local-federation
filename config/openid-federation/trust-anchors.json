@@ -463,6 +463,46 @@
         }
       },
       {
+        "entity-identifier": "https://local.fed.swedenconnect.se:11030/testrp3",
+        "jwks": "public:test-client",
+        "metadata": {
+          "openid_relying_party": {
+            "organization_name#sv": "Sweden Connect",
+            "organization_name#en": "Sweden Connect",
+            "organization_name": "Sweden Connect",
+            "organization_identifier": "urn:glue:iso6523:0007:2021006883"
+          }
+        },
+        "policy": {
+          "id": "test-client-testrp3",
+          "policy": {
+            "openid_relying_party": {
+              "display_name#sv": {
+                "value": "Sweden Connect Test-RP 3"
+              },
+              "display_name#en": {
+                "value": "Sweden Connect Test RP 3"
+              },
+              "display_name": {
+                "value": "Sweden Connect Test-RP 3"
+              },
+              "client_name#sv": {
+                "value": "Sweden Connect Test-RP 3"
+              },
+              "client_name#en": {
+                "value": "Sweden Connect Test RP 3"
+              },
+              "client_name": {
+                "value": "Sweden Connect Test-RP 3"
+              },
+              "logo_uri": {
+                "value": "https://local.fed.swedenconnect.se:11030/testrp3/logo.svg"
+              }
+            }
+          }
+        }
+      },
+      {
         "entity-identifier": "https://local.fed.swedenconnect.se:11020/testmyeid",
         "jwks": "public:test-my-eid",
         "metadata": {

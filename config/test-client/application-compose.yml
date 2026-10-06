@@ -70,6 +70,24 @@ credential:
         key:
           alias: oidc-encrypt
           key-password: secret
+      oidc-ec-sign:
+        name: "Test Client OIDC EC Signing 1"
+        store-reference: oidc-keys
+        key:
+          alias: oidc-ec-sign
+          key-password: secret
+      oidc-ec-sign2:
+        name: "Test Client OIDC EC Signing 2"
+        store-reference: oidc-keys
+        key:
+          alias: oidc-ec-sign2
+          key-password: secret
+      oidc-ec-encrypt:
+        name: "Test Client OIDC EC Encryption"
+        store-reference: oidc-keys
+        key:
+          alias: oidc-ec-encrypt
+          key-password: secret
       oidf-federation:
         name: "Test Client Federation Key"
         store-reference: federation-key
@@ -174,6 +192,41 @@ testclient:
             bundle: oidc-sign
           encryption:
             bundle: oidc-encrypt
+          metadata:
+            bundle: oidf-federation
+      # https://local.fed.swedenconnect.se:11030/testrp3, registered under im-reg-sc. It uses EC P-256 keys only: two
+      # active signing keys, both published, and an encryption key that the ID token and the UserInfo response are
+      # encrypted for (ECDH-ES).
+      - path-suffix: "testrp3"
+        description: "Test OIDC RP 3 - RP with two active EC signing keys and EC encrypted ID token and UserInfo"
+        metadata: |
+          {
+            "response_types" : [ "code" ],
+            "grant_types" : [ "authorization_code" ],
+            "client_name" : "Sweden Connect Test-RP 3",
+            "client_name#sv" : "Sweden Connect Test-RP 3",
+            "client_name#en" : "Sweden Connect Test RP 3",
+            "client_uri" : "https://local.fed.swedenconnect.se:11030",
+            "logo_uri" : "<logo>",
+            "contacts" : [ "operations@swedenconnect.se" ],
+            "organization_name#sv" : "Sweden Connect",
+            "organization_name#en" : "Sweden Connect",
+            "organization_identifier" : "urn:glue:iso6523:0007:2021006883",
+            "subject_type" : "public",
+            "token_endpoint_auth_method" : "private_key_jwt",
+            "require_auth_time" : true,
+            "id_token_encrypted_response_alg" : "ECDH-ES",
+            "id_token_encrypted_response_enc" : "A256GCM",
+            "userinfo_encrypted_response_alg" : "ECDH-ES",
+            "userinfo_encrypted_response_enc" : "A256GCM"
+          }
+        credentials:
+          signing:
+            bundle: oidc-ec-sign
+          signing2:
+            bundle: oidc-ec-sign2
+          encryption:
+            bundle: oidc-ec-encrypt
           metadata:
             bundle: oidf-federation
 

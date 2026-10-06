@@ -62,6 +62,10 @@
           {
             "sub": "https://local.fed.swedenconnect.se:11030/testrp2",
             "granted": "2026-10-01T00:00:00Z"
+          },
+          {
+            "sub": "https://local.fed.swedenconnect.se:11030/testrp3",
+            "granted": "2026-10-01T00:00:00Z"
           }
         ]
       },
