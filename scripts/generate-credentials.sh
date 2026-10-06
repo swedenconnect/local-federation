@@ -26,9 +26,9 @@
 #
 # The reference, test-my-eid and test-client targets generate the SAML keys of each service.
 #
-# The oidc target generates the OpenID Connect keys of the services that need keys of their own: the signing key of
-# the reference authentication server, and the signing key and the RSA encryption key (used by Test RP 2) of the test
-# client (oidc-keys.jks in their configuration folders). Test my eID uses its SAML keys for OpenID Connect.
+# The oidc target generates the OpenID Connect keys of the services that need keys of their own: the signing key and
+# the RSA encryption key of the reference authentication server, and the signing key and the RSA encryption key (used
+# by Test RP 2) of the test client (oidc-keys.jks in their configuration folders). Test my eID uses its SAML keys for OpenID Connect.
 #
 # The federation target generates every OpenID Federation key: the keys of the federation entities (trust anchor,
 # trust mark issuers and registration intermediates), and the keys of the reference authentication server,
@@ -283,10 +283,11 @@ generate_test_my_eid() {
 }
 
 generate_oidc() {
-  echo "Generating the OpenID Connect signing key of the reference authentication server ..."
+  echo "Generating the OpenID Connect signing and encryption keys of the reference authentication server ..."
   local store="${CONFIG}/reference-authn-server/oidc-keys.jks"
   rm -f "${store}"
   genkey "${store}" oidc-sign "Reference Authentication Server OIDC Signing"
+  genkey "${store}" oidc-encrypt "Reference Authentication Server OIDC Encryption"
 
   echo "Generating the OpenID Connect signing and encryption keys of the test client ..."
   store="${CONFIG}/test-client/oidc-keys.jks"

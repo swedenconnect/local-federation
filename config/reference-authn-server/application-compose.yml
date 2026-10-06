@@ -67,6 +67,12 @@ credential:
         key:
           alias: oidc-sign
           key-password: secret
+      oidc-encrypt:
+        name: "OIDC Encryption Key"
+        store-reference: oidc-keys
+        key:
+          alias: oidc-encrypt
+          key-password: secret
       oidf-federation:
         name: "OpenID Federation Key"
         store-reference: federation-key
@@ -108,6 +114,16 @@ authn-server:
       signing:
         - credential:
             bundle: oidc-sign
+      # Published in the JWKS with use "enc", so that clients can encrypt request objects.
+      decryption:
+        - credential:
+            bundle: oidc-encrypt
+    # The offered scopes, replacing the ones derived from the authentication provider (which include profile and
+    # sign). openid is always offered.
+    scopes:
+      - https://id.oidc.se/scope/naturalPersonInfo
+      - https://id.oidc.se/scope/naturalPersonNumber
+      - https://id.oidc.se/scope/signApproval
     federation:
       enabled: true
       authority-hints:
@@ -143,6 +159,16 @@ authn-server:
       trust-anchor:
         entity-id: https://local.fed.swedenconnect.se:11040/trustanchor
         jwks: file:${COMMON_CONFIG_DIR}/oidf-trust-anchor.jwks
+
+# The levels of assurance of both the SAML IdP and the OpenID Provider: the default list of the reference service
+# without the eIDAS levels.
+authn-server-reference:
+  authn:
+    supported-loas:
+      - http://id.elegnamnden.se/loa/1.0/loa3
+      - http://id.swedenconnect.se/loa/1.0/uncertified-loa3
+      - http://id.elegnamnden.se/loa/1.0/loa2
+      - http://id.elegnamnden.se/loa/1.0/loa4
 
 # Audit events are kept in memory, where the Actuator's auditevents endpoint can read them, and written to a file
 # that is rolled daily.
