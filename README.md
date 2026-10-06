@@ -12,31 +12,9 @@ For OpenID Connect, it runs an OpenID Federation built like the Sweden Connect O
 
 > All keys, key stores and certificates in this repository are test credentials. They are public and offer no protection. Never use them for anything but the local federation.
 
-## Quick start
-
-1. Add this line to your hosts file (`/etc/hosts` on macOS and Linux, `C:\Windows\System32\drivers\etc\hosts` on Windows):
-
-   ```
-   127.0.0.1       local.fed.swedenconnect.se
-   ```
-
-2. Get the latest images and start the federation from the root of the repository:
-
-   ```bash
-   docker compose pull
-   docker compose up -d
-   ```
-
-3. Open the [start page](https://docs.swedenconnect.se/local-federation/start-page.html) in your browser and accept the self-signed certificate of `local.fed.swedenconnect.se`.
-
-The [setup walkthrough](https://docs.swedenconnect.se/local-federation/setup.html) describes each step in detail, including what to do if the reference authentication server image is not available.
-
 ## Documentation
 
-- [Setting up the local federation](https://docs.swedenconnect.se/local-federation/setup.html) – Prerequisites, starting and stopping, a first login, audit entries, local builds of the reference authentication server and the OpenID Federation service, regenerating keys and refreshing metadata.
-- [Services](https://docs.swedenconnect.se/local-federation/services.html) – Each service with its ports, URLs and configuration folder.
-- [OpenID Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html) – The structure of the OpenID Federation, registering your own Relying Parties and OpenID Providers, granting trust marks, and checking a registration.
-- [Start page](https://docs.swedenconnect.se/local-federation/start-page.html) – An HTML page with links to every service.
+The [documentation](https://docs.swedenconnect.se/local-federation) describes how to set up and use the local federation.
 
 ---
 
