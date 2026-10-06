@@ -27,7 +27,9 @@ For OpenID Connect, it runs an OpenID Federation built like the Sweden Connect O
    docker compose up -d
    ```
 
-3. Open the [start page](start-page.html) in your browser and accept the self-signed certificate of `local.fed.swedenconnect.se`.
+3. All services use a self-signed certificate, so your browser shows a warning the first time you open each service. Before you log in, open each service in the [list in the setup walkthrough](setup.html#accepting-the-tls-certificate) and accept the warning.
+
+4. Open the [start page](start-page.html) in your browser. It links to every service.
 
 The [setup walkthrough](setup.html) describes each step in detail, including what to do if the reference authentication server image is not available.
 

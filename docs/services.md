@@ -6,7 +6,7 @@
 
 This is the reference for the services in [docker-compose.yml](https://github.com/swedenconnect/local-federation/blob/main/docker-compose.yml): what each service is for, its ports, URLs and configuration folder. How to set up the federation is described in [Setting up the local federation](https://docs.swedenconnect.se/local-federation/setup.html), and the OpenID Federation in [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html).
 
-All services are reached through the host name `local.fed.swedenconnect.se`, which you map to `127.0.0.1` in your hosts file. The containers reach each other through the same host name, so every URL below works both from your browser and from the services themselves. All HTTPS endpoints use the same self-signed certificate, see [Keys and certificates](#keys-and-certificates).
+All services are reached through the host name `local.fed.swedenconnect.se`, which you map to `127.0.0.1` in your hosts file. The containers reach each other through the same host name, so every URL below works both from your browser and from the services themselves. All HTTPS endpoints use the same self-signed certificate, see [Keys and certificates](#keys-and-certificates). Your browser shows a warning for it the first time you open each service, and you must accept it for each service before you log in, see [Accepting the TLS certificate](https://docs.swedenconnect.se/local-federation/setup.html#accepting-the-tls-certificate).
 
 - [Port ranges](#port-ranges)
 - [Base services](#base-services)

@@ -107,15 +107,17 @@ When everything runs, open the [start page](https://docs.swedenconnect.se/local-
 <a name="accepting-the-tls-certificate"></a>
 ## Accepting the TLS certificate
 
-All services use one self-signed TLS certificate for `local.fed.swedenconnect.se`, [config/common/tls.crt](https://github.com/swedenconnect/local-federation/blob/main/config/common/tls.crt). Your browser does not trust it, so it shows a warning the first time you open a service.
+All services use one self-signed TLS certificate for `local.fed.swedenconnect.se`, [config/common/tls.crt](https://github.com/swedenconnect/local-federation/blob/main/config/common/tls.crt). Your browser does not trust it, so it shows a warning the first time you open each service. Every service has its own port, and accepting the warning only makes an exception for the address you opened, host and port. Some browsers may remember the decision more widely, but expect one warning per service.
 
-Accept the certificate **before** you log in. A login moves your browser between several services, and if one of them has a certificate the browser has not accepted, the login stops halfway with a certificate error. Open each of these and accept the warning:
+Accept the warning for each service **before** you log in. A login moves your browser between several services, and if it reaches one where you have not accepted the warning, the login stops halfway with a certificate error. Open each of these and accept the warning:
 
-- https://local.fed.swedenconnect.se:11000/metadata/feed
-- https://local.fed.swedenconnect.se:11010/saml2/metadata
-- https://local.fed.swedenconnect.se:11020/testmyeid
-- https://local.fed.swedenconnect.se:11030
-- https://local.fed.swedenconnect.se:11040/trustanchor/subordinate_listing
+- https://local.fed.swedenconnect.se:11010/saml2/metadata (reference authentication server)
+- https://local.fed.swedenconnect.se:11020/testmyeid (Test my eID)
+- https://local.fed.swedenconnect.se:11030 (test client)
+
+A login does not take your browser to the metadata aggregator (port 11000) or the OpenID Federation service (port 11040), since only the services themselves call them. You get a warning for each of them too the first time you open one of their links, for example from the start page.
+
+The local federation has no CA of its own that you could install once to remove all warnings. Its private key would be public in this repository, so anyone could use it to issue certificates for any site that your browser would then trust.
 
 Instead of accepting it per service, you can make your machine trust the certificate. On macOS:
 
@@ -123,7 +125,7 @@ Instead of accepting it per service, you can make your machine trust the certifi
 sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/common/tls.crt
 ```
 
-On Windows, import `tls.crt` into "Trusted Root Certification Authorities" with the certificate manager (`certmgr.msc`). Firefox uses a trust store of its own, see its settings under "Certificates". Remove the certificate again when you no longer use the local federation, or after you have [regenerated it](#regenerating-keys).
+On Windows, import `tls.crt` into "Trusted Root Certification Authorities" with the certificate manager (`certmgr.msc`). Firefox uses a trust store of its own, see its settings under "Certificates". Trusting it only covers the names in the certificate, `local.fed.swedenconnect.se`, `localhost` and `127.0.0.1`. Remove the certificate again when you no longer use the local federation, or after you have [regenerated it](#regenerating-keys).
 
 <a name="first-login-test-my-eid"></a>
 ## A first login from Test my eID
@@ -341,7 +343,7 @@ docker compose restart openid-federation
 
 The `federation` target creates `config/openid-federation/federation-keys.jks` anew, so keys that you have added to it yourself, such as the key of a [hosted Relying Party](https://docs.swedenconnect.se/local-federation/openid-federation.html#adding-hosted-rp), must be added again.
 
-After a new TLS certificate, accept it again in your browser, see [Accepting the TLS certificate](#accepting-the-tls-certificate).
+After a new TLS certificate, accept the warning again for each service in your browser, see [Accepting the TLS certificate](#accepting-the-tls-certificate).
 
 <a name="refreshing-metadata"></a>
 ## Refreshing the metadata
