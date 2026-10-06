@@ -94,6 +94,8 @@ docker compose logs -f reference-authn-server
 docker compose down
 ```
 
+Run `docker compose pull` every time before you start the federation. Most images use the `latest` tag, and `docker compose up` does not fetch a newer image when an older one with the same tag is already on your machine.
+
 The metadata aggregator starts first. The other services wait until it is healthy, and the reference authentication server also waits for Redis. The OpenID Federation service starts on its own. The first start takes a minute or two.
 
 After all services report healthy, it takes up to about half a minute before OpenID Connect logins work. The OpenID Federation service starts before the reference authentication server, Test my eID and the test client, so it cannot read their entity configurations at first. It reads them again every 15 seconds. The reference authentication server and Test my eID try a failed federation lookup again after 15 seconds, and the test client makes its first lookup 30 seconds after it starts.

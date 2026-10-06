@@ -20,9 +20,10 @@ For OpenID Connect, it runs an OpenID Federation built like the Sweden Connect O
    127.0.0.1       local.fed.swedenconnect.se
    ```
 
-2. Start the federation from the root of the repository:
+2. Get the latest images and start the federation from the root of the repository:
 
    ```bash
+   docker compose pull
    docker compose up -d
    ```
 
