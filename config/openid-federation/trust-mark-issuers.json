@@ -77,6 +77,31 @@
             "granted": "2026-10-01T00:00:00Z"
           }
         ]
+      },
+      {
+        "trust-mark-type": "https://id.swedenconnect.se/tm-prop/public-body",
+        "trust-mark-subjects": [
+          {
+            "sub": "https://local.fed.swedenconnect.se:11010",
+            "granted": "2026-10-01T00:00:00Z"
+          },
+          {
+            "sub": "https://local.fed.swedenconnect.se:11020/testmyeid",
+            "granted": "2026-10-01T00:00:00Z"
+          },
+          {
+            "sub": "https://local.fed.swedenconnect.se:11030/testrp1",
+            "granted": "2026-10-01T00:00:00Z"
+          },
+          {
+            "sub": "https://local.fed.swedenconnect.se:11030/testrp2",
+            "granted": "2026-10-01T00:00:00Z"
+          },
+          {
+            "sub": "https://local.fed.swedenconnect.se:11030/testrp3",
+            "granted": "2026-10-01T00:00:00Z"
+          }
+        ]
       }
     ]
   }

@@ -138,7 +138,7 @@ The OpenID Provider is a member of the [OpenID Federation](https://docs.swedenco
 - The supported levels of assurance, for both SAML and OpenID Connect, are the default list of the service without the eIDAS levels: `http://id.elegnamnden.se/loa/1.0/loa3`, `http://id.swedenconnect.se/loa/1.0/uncertified-loa3`, `http://id.elegnamnden.se/loa/1.0/loa2` and `http://id.elegnamnden.se/loa/1.0/loa4`.
 - **OpenID Connect:** the OpenID Connect signing key and the RSA encryption key, which clients may encrypt request objects for, are in `oidc-keys.jks`, and the federation key that signs the entity configuration in `federation-key.jks`, see [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services).
 - The OpenID Provider offers the scopes `openid`, `profile`, `https://id.oidc.se/scope/naturalPersonInfo`, `https://id.oidc.se/scope/naturalPersonNumber` and `https://id.oidc.se/scope/signApproval`.
-- The OpenID Provider is registered under the OP Registration Intermediate `im-reg-sc-op`. It fetches its trust marks, `loa2`, `loa3` and `loa4` from `tmi-loa` and both contract trust marks from `tmi-contracts`, and verifies them with the keys of the issuers in `config/common/oidf-tmi-loa.jwks` and `config/common/oidf-tmi-contracts.jwks`.
+- The OpenID Provider is registered under the OP Registration Intermediate `im-reg-sc-op`. It fetches its trust marks, `loa2`, `loa3` and `loa4` from `tmi-loa` and both contract trust marks and `public-body` from `tmi-contracts`, and verifies them with the keys of the issuers in `config/common/oidf-tmi-loa.jwks` and `config/common/oidf-tmi-contracts.jwks`.
 - Its clients are resolved through the federation, at the resolve endpoint of the trust anchor, verified with the key in `config/common/oidf-trust-anchor.jwks`. No clients are configured in the server itself.
 - The OpenID Connect codes, tokens, federation cache and trust marks are kept in [Redis](#redis), like the rest of its state.
 - The Service Provider metadata is downloaded from the metadata aggregator, and validated with the aggregator's certificate. A copy is kept in `cache/`, which is git-ignored.
@@ -183,7 +183,7 @@ It is also an OpenID Connect Relying Party that is a member of the [OpenID Feder
 - The SAML signing, encryption and metadata signing keys are in `sp-keys.jks`.
 - **OpenID Connect:** the Relying Party has the entity identifier and client ID `https://local.fed.swedenconnect.se:11020/testmyeid`, and is registered under the RP Registration Intermediate `im-reg-sc`. It uses the SAML signing and encryption keys for OpenID Connect.
 - The federation key that signs its entity configuration is in `federation-key.jks`, see [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services).
-- They trust the trust anchor with the key in `config/common/oidf-trust-anchor.jwks`, finds the OpenID Providers through `im-reg-sc-op`, and fetches the trust mark `https://id.swedenconnect.se/contract/sc/eid-authorization-system` from `tmi-contracts`.
+- They trust the trust anchor with the key in `config/common/oidf-trust-anchor.jwks`, finds the OpenID Providers through `im-reg-sc-op`, and fetches the trust marks `https://id.swedenconnect.se/contract/sc/eid-authorization-system` and `https://id.swedenconnect.se/tm-prop/public-body` from `tmi-contracts`.
 - Every Identity Provider of the metadata feed is offered on the start page.
 
 ---
@@ -228,7 +228,7 @@ It also has three OpenID Connect Relying Parties, Test RP 1, Test RP 2 and Test 
   - Test RP 2, `https://local.fed.swedenconnect.se:11030/testrp2` – Pairwise subject identifiers. The ID token and the UserInfo response are encrypted for its RSA key (`RSA-OAEP-256` and `A256GCM`).
   - Test RP 3, `https://local.fed.swedenconnect.se:11030/testrp3` – Public subject identifiers and EC P-256 keys only. It has two active signing keys, both published in its metadata, and the ID token and the UserInfo response are encrypted for its EC key (`ECDH-ES` and `A256GCM`).
 - The OpenID Connect keys of the Relying Parties are in `oidc-keys.jks`. The federation key that signs their entity configurations is in `federation-key.jks`, see [OpenID Federation in the Local Federation](https://docs.swedenconnect.se/local-federation/openid-federation.html#registered-services).
-- It trusts the trust anchor with the key in `config/common/oidf-trust-anchor.jwks`, and fetches the trust mark `https://id.swedenconnect.se/contract/sc/eid-authorization-system` from `tmi-contracts`.
+- It trusts the trust anchor with the key in `config/common/oidf-trust-anchor.jwks`, and fetches the trust marks `https://id.swedenconnect.se/contract/sc/eid-authorization-system` and `https://id.swedenconnect.se/tm-prop/public-body` from `tmi-contracts`.
 
 ---
 

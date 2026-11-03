@@ -44,7 +44,7 @@ Trust Anchor (trustanchor), also the resolver
 - RP Registration Intermediate – Registers Relying Parties. It issues the subordinate statements of the Relying Parties, and can host the entity configuration of a Relying Party that cannot publish one itself.
 - OP Registration Intermediate – Registers OpenID Providers.
 - Level of Assurance Trust Mark Issuer – Issues trust marks stating that an OpenID Provider is approved for a level of assurance.
-- Contracts Trust Mark Issuer – Issues trust marks stating that a Relying Party or OpenID Provider has signed a Sweden Connect contract.
+- Contracts Trust Mark Issuer – Issues the property and contract trust marks: trust marks stating a property of a Relying Party or OpenID Provider, such as being a public body, and trust marks stating that it has signed a Sweden Connect contract.
 
 The trust anchor's subordinate statements for the two intermediates carry the federation-wide metadata policy, see [Metadata policies](#metadata-policies), and constrain the entity types below them with `allowed_entity_types`: only `openid_relying_party` below `im-reg-sc` and only `openid_provider` below `im-reg-sc-op`. The resolver removes the metadata of any other entity type from the resolved metadata of an entity below them, except `federation_entity`, which is always kept.
 
@@ -102,6 +102,7 @@ All entities are reached on port `11040`. The entity configuration of each entit
 | `https://id.swedenconnect.se/loa/nonresident` | `tmi-loa` | No one |
 | `https://id.swedenconnect.se/contract/sc/eid-authorization-system` | `tmi-contracts` | The reference OP, the test client and Test my eID |
 | `https://id.swedenconnect.se/contract/sc/prepaid-auth-2021` | `tmi-contracts` | The reference OP |
+| `https://id.swedenconnect.se/tm-prop/public-body` | `tmi-contracts` | The reference OP, the test client and Test my eID |
 
 The meaning of each type is given in Section 4 of the [structure document](https://docs.swedenconnect.se/federation/oidf-structure.html#name-trust-marks). Issued trust marks are valid for one year.
 
@@ -206,7 +207,7 @@ Each key store has one key, alias `federation`, password `secret`. Its certifica
 
 The entity identifier of the OpenID Provider is its issuer, which is the base URL of the reference authentication server. The test client forms the identifier of a Relying Party from its base URL and the RP's path suffix, and Test my eID from its base URL and context path.
 
-The services publish their own entity configurations, signed with these keys, and fetch their trust marks from the issuers: the reference OpenID Provider `loa2`, `loa3`, `loa4` and both contract trust marks, and the Relying Parties `eid-authorization-system`. All three are resolved at the trust anchor. The reference OpenID Provider resolves its clients at the trust anchor too, so every Relying Party registered under `im-reg-sc` can use it. It also finds them with a background job that walks the federation from the trust anchor, every minute here, and a client that the job has not found yet is resolved at its first request. See [Clients from OpenID Federation](https://docs.swedenconnect.se/spring-authentication-server/configuration.html#oidc-federation-clients) for the settings of the job.
+The services publish their own entity configurations, signed with these keys, and fetch their trust marks from the issuers: the reference OpenID Provider `loa2`, `loa3`, `loa4`, both contract trust marks and `public-body`, and the Relying Parties `eid-authorization-system` and `public-body`. All three are resolved at the trust anchor. The reference OpenID Provider resolves its clients at the trust anchor too, so every Relying Party registered under `im-reg-sc` can use it. It also finds them with a background job that walks the federation from the trust anchor, every minute here, and a client that the job has not found yet is resolved at its first request. See [Clients from OpenID Federation](https://docs.swedenconnect.se/spring-authentication-server/configuration.html#oidc-federation-clients) for the settings of the job.
 
 The resolve responses of the three services hold these trust marks. Test my eID checks that the OpenID Provider holds the level of assurance trust mark for the level it states after a login.
 
@@ -442,7 +443,7 @@ What the metadata of your Relying Party or OpenID Provider must contain is given
 | Trust anchor | Entity identifier `https://local.fed.swedenconnect.se:11040/trustanchor`, with the key in [config/common](https://github.com/swedenconnect/local-federation/tree/main/config/common), see [The trust anchor key](#trust-anchor-key). |
 | Authority hints | `https://local.fed.swedenconnect.se:11040/im-reg-sc` for a Relying Party, `https://local.fed.swedenconnect.se:11040/im-reg-sc-op` for an OpenID Provider. |
 | Resolve endpoint | `https://local.fed.swedenconnect.se:11040/trustanchor/resolve`. Resolve responses are signed with the trust anchor key. |
-| Trust mark issuers | `https://local.fed.swedenconnect.se:11040/tmi-loa` for level of assurance trust marks, and `https://local.fed.swedenconnect.se:11040/tmi-contracts` for contract trust marks, as listed in the trust anchor's `trust_mark_issuers`. Their keys are in `config/common/oidf-tmi-loa.jwks` and `config/common/oidf-tmi-contracts.jwks`. A trust mark is fetched with `GET <trust mark endpoint>?trust_mark_type=<type>&sub=<entity identifier>`, and its status checked with `POST <trust mark status endpoint>` and the form parameter `trust_mark=<trust mark>`, see [Entities and endpoints](#entities-and-endpoints). |
+| Trust mark issuers | `https://local.fed.swedenconnect.se:11040/tmi-loa` for level of assurance trust marks, and `https://local.fed.swedenconnect.se:11040/tmi-contracts` for property and contract trust marks, as listed in the trust anchor's `trust_mark_issuers`. Their keys are in `config/common/oidf-tmi-loa.jwks` and `config/common/oidf-tmi-contracts.jwks`. A trust mark is fetched with `GET <trust mark endpoint>?trust_mark_type=<type>&sub=<entity identifier>`, and its status checked with `POST <trust mark status endpoint>` and the form parameter `trust_mark=<trust mark>`, see [Entities and endpoints](#entities-and-endpoints). |
 | Finding OpenID Providers | The subordinate listing of the OP Registration Intermediate, `https://local.fed.swedenconnect.se:11040/im-reg-sc-op/subordinate_listing`. Resolve each listed entity at the resolve endpoint to get its metadata. |
 | Finding Relying Parties | The subordinate listing of the RP Registration Intermediate, `https://local.fed.swedenconnect.se:11040/im-reg-sc/subordinate_listing`. |
 | Federation key | A key of the service's own, whose public key you add to the federation, see [Adding a Relying Party that publishes its entity configuration](#adding-rp). |

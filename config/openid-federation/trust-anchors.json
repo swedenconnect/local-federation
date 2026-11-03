@@ -376,7 +376,8 @@
       "https://id.swedenconnect.se/loa/eidas": ["https://local.fed.swedenconnect.se:11040/tmi-loa"],
       "https://id.swedenconnect.se/loa/nonresident": ["https://local.fed.swedenconnect.se:11040/tmi-loa"],
       "https://id.swedenconnect.se/contract/sc/eid-authorization-system": ["https://local.fed.swedenconnect.se:11040/tmi-contracts"],
-      "https://id.swedenconnect.se/contract/sc/prepaid-auth-2021": ["https://local.fed.swedenconnect.se:11040/tmi-contracts"]
+      "https://id.swedenconnect.se/contract/sc/prepaid-auth-2021": ["https://local.fed.swedenconnect.se:11040/tmi-contracts"],
+      "https://id.swedenconnect.se/tm-prop/public-body": ["https://local.fed.swedenconnect.se:11040/tmi-contracts"]
     }
   },
   {
