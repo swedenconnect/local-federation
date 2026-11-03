@@ -133,6 +133,8 @@ testclient:
       trust-marks:
         - trust-mark-type: https://id.swedenconnect.se/contract/sc/eid-authorization-system
           issuer: https://local.fed.swedenconnect.se:11040/tmi-contracts
+        - trust-mark-type: https://id.swedenconnect.se/tm-prop/public-body
+          issuer: https://local.fed.swedenconnect.se:11040/tmi-contracts
     rps:
       # The entity identifier, and client ID, is the base URL followed by the path suffix:
       # https://local.fed.swedenconnect.se:11030/testrp1. It is registered under im-reg-sc in the OpenID Federation.

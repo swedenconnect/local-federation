@@ -113,6 +113,7 @@ rp:
       - entity-id: https://local.fed.swedenconnect.se:11040/tmi-contracts
         trust-mark-types:
           - https://id.swedenconnect.se/contract/sc/eid-authorization-system
+          - https://id.swedenconnect.se/tm-prop/public-body
 
 logging:
   level:
