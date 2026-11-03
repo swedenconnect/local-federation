@@ -206,7 +206,7 @@ Each key store has one key, alias `federation`, password `secret`. Its certifica
 
 The entity identifier of the OpenID Provider is its issuer, which is the base URL of the reference authentication server. The test client forms the identifier of a Relying Party from its base URL and the RP's path suffix, and Test my eID from its base URL and context path.
 
-The services publish their own entity configurations, signed with these keys, and fetch their trust marks from the issuers: the reference OpenID Provider `loa2`, `loa3`, `loa4` and both contract trust marks, and the Relying Parties `eid-authorization-system`. All three are resolved at the trust anchor. The reference OpenID Provider resolves its clients at the trust anchor too, so every Relying Party registered under `im-reg-sc` can use it.
+The services publish their own entity configurations, signed with these keys, and fetch their trust marks from the issuers: the reference OpenID Provider `loa2`, `loa3`, `loa4` and both contract trust marks, and the Relying Parties `eid-authorization-system`. All three are resolved at the trust anchor. The reference OpenID Provider resolves its clients at the trust anchor too, so every Relying Party registered under `im-reg-sc` can use it. It also finds them with a background job that walks the federation from the trust anchor, every minute here, and a client that the job has not found yet is resolved at its first request. See [Clients from OpenID Federation](https://docs.swedenconnect.se/spring-authentication-server/configuration.html#oidc-federation-clients) for the settings of the job.
 
 The resolve responses of the three services hold these trust marks. Test my eID checks that the OpenID Provider holds the level of assurance trust mark for the level it states after a login.
 
@@ -339,6 +339,8 @@ In this service the hosted entity configuration is built from `entities.json` an
    }
    ```
 
+   The reference OpenID Provider fetches the keys at `jwks_uri` from its container when it resolves the Relying Party, and trusts only the certificates in `config/common/trust.jks`. A `jwks_uri` such as `https://rp.example.com/jwks` therefore only works if its certificate is added to that trust store, otherwise the Relying Party is marked as invalid, see [Setting up a service that joins the federation](#joining-service). Giving the keys in `jwks` instead avoids this.
+
 3. **The subordinate entry.** Add the Relying Party to the subordinates of `im-reg-sc` in [trust-anchors.json](https://github.com/swedenconnect/local-federation/blob/main/config/openid-federation/trust-anchors.json) as in [the previous section](#adding-rp), with the same `virtual-entity-id` and the hosting key:
 
    ```json
@@ -444,9 +446,11 @@ What the metadata of your Relying Party or OpenID Provider must contain is given
 | Finding OpenID Providers | The subordinate listing of the OP Registration Intermediate, `https://local.fed.swedenconnect.se:11040/im-reg-sc-op/subordinate_listing`. Resolve each listed entity at the resolve endpoint to get its metadata. |
 | Finding Relying Parties | The subordinate listing of the RP Registration Intermediate, `https://local.fed.swedenconnect.se:11040/im-reg-sc/subordinate_listing`. |
 | Federation key | A key of the service's own, whose public key you add to the federation, see [Adding a Relying Party that publishes its entity configuration](#adding-rp). |
-| TLS | All endpoints use the self-signed certificate [config/common/tls.crt](https://github.com/swedenconnect/local-federation/blob/main/config/common/tls.crt), which the service must trust. A Java service can use the trust store [config/common/trust.jks](https://github.com/swedenconnect/local-federation/blob/main/config/common/trust.jks) (password `secret`). |
+| TLS | All endpoints use the self-signed certificate [config/common/tls.crt](https://github.com/swedenconnect/local-federation/blob/main/config/common/tls.crt), which the service must trust. A Java service can use the trust store [config/common/trust.jks](https://github.com/swedenconnect/local-federation/blob/main/config/common/trust.jks) (password `secret`). A `jwks_uri` of a Relying Party must use `https` and be reachable from the reference authentication server's container, with a certificate that `config/common/trust.jks` holds. Otherwise the reference OpenID Provider marks the Relying Party as invalid for 15 seconds at a time. Keys given in `jwks` in the metadata avoid this. |
 
 A service that runs in a container must reach `local.fed.swedenconnect.se` on your machine, for example with `extra_hosts: ["local.fed.swedenconnect.se:host-gateway"]` in Docker Compose. A service that runs directly on your machine uses the hosts file entry, see [Setting up the local federation](https://docs.swedenconnect.se/local-federation/setup.html#prerequisites). The federation service in turn must reach the entity configuration of your service, so publish it on a URL that resolves from inside a container, which `localhost` does not.
+
+The reference OpenID Provider validates a Relying Party each time it resolves it, and blocks one that it cannot serve, for example one with an unsupported algorithm or without usable keys. It then answers `invalid_client` at the redirect URI, or shows an error page if the Relying Party has no `redirect_uris`. The rules are listed in [Invalid clients](https://docs.swedenconnect.se/spring-authentication-server/client-registry.html#invalid-clients), and [Checking a registration](#checking) tells how to find the reason.
 
 <a name="checking"></a>
 ## Checking a registration
@@ -505,6 +509,7 @@ The error codes are those of the specification. `invalid_request` (HTTP 400) is 
 
 - A resolve that fails with "Resolver found no subject" means that the resolver has not read the entity configuration of the entity. Check that the entity publishes it, that it is signed with the key in the subordinate entry, with that key's `kid` in the header, and that it was reachable when the resolver last read it. The resolver reads when the federation service starts, and then every 15 seconds. https://local.fed.swedenconnect.se:11041/actuator/dead-nodes lists the entities it could not fetch at its last reading.
 - The log of the federation service shows the errors of the trust chain building: `docker compose logs openid-federation`.
+- If the reference OpenID Provider turns a Relying Party away with `invalid_client`, https://local.fed.swedenconnect.se:11011/actuator/clients shows the Relying Party as invalid with the reason, and the audit log of the reference authentication server has a `client_invalid` event for it, see [Audit entries and the Actuator](https://docs.swedenconnect.se/local-federation/setup.html#audit-and-actuator).
 
 ---
 
