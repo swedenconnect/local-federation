@@ -182,7 +182,7 @@ Test my eID lists the OpenID Providers of the federation on its start page next 
 <a name="audit-and-actuator"></a>
 ## Audit entries and the Actuator
 
-The reference authentication server writes an audit event for every step of a login, and for changes of the Service Providers it knows. The events are written to [config/reference-authn-server/audit/audit.log](https://github.com/swedenconnect/local-federation/tree/main/config/reference-authn-server/audit), one JSON event per line, on your machine:
+The reference authentication server writes an audit event for every step of a login, for changes of the Service Providers and OpenID Connect clients it knows, and for clients it has found invalid. The events are written to [config/reference-authn-server/audit/audit.log](https://github.com/swedenconnect/local-federation/tree/main/config/reference-authn-server/audit), one JSON event per line, on your machine:
 
 ```bash
 tail -f config/reference-authn-server/audit/audit.log

@@ -118,12 +118,6 @@ authn-server:
       decryption:
         - credential:
             bundle: oidc-encrypt
-    # The offered scopes, replacing the ones derived from the authentication provider (which include profile and
-    # sign). openid is always offered.
-    scopes:
-      - https://id.oidc.se/scope/naturalPersonInfo
-      - https://id.oidc.se/scope/naturalPersonNumber
-      - https://id.oidc.se/scope/signApproval
     federation:
       enabled: true
       authority-hints:
@@ -154,6 +148,11 @@ authn-server:
       clients:
         cache:
           not-found-time-to-live: 15s
+        # The background job that fills the client cache from the federation runs every minute, so that a run that
+        # fails before the local federation is up is soon made again, and a newly registered Relying Party is soon
+        # found. Stored resolve results are reused, so this mainly adds listing calls to the federation service.
+        collector:
+          interval: 1m
       # The clients, Relying Parties, are resolved through the federation at the trust anchor. No trust marks are
       # required of them.
       trust-anchor:
