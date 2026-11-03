@@ -210,7 +210,7 @@ The services publish their own entity configurations, signed with these keys, an
 
 The resolve responses of the three services hold these trust marks. Test my eID checks that the OpenID Provider holds the level of assurance trust mark for the level it states after a login.
 
-The Section 6.2 values are taken from the configuration of each service: the display names, client names and logotypes that it publishes, and its organization, Sweden Connect with organization number `2021006883`. The OpenID Provider's `acr_values_supported` is pinned to the level of assurance URIs that it declares for LoA 2, 3 and 4, `http://id.elegnamnden.se/loa/1.0/loa2`, `http://id.elegnamnden.se/loa/1.0/loa3` and `http://id.elegnamnden.se/loa/1.0/loa4`.
+The Section 6.2 values are taken from the configuration of each service: the display names, client names and logotypes that it publishes, and its organization, Sweden Connect with organization number `2021006883`. The untagged `organization_name` is the legal name that the federation operator assigns, `Myndigheten för digital förvaltning`. The OpenID Provider's `acr_values_supported` is pinned to the level of assurance URIs that it declares, `http://id.elegnamnden.se/loa/1.0/loa3`, `http://id.swedenconnect.se/loa/1.0/uncertified-loa3`, `http://id.elegnamnden.se/loa/1.0/loa2` and `http://id.elegnamnden.se/loa/1.0/loa4`. There is no trust mark for `uncertified-loa3`, since the federation has no trust mark type for that level.
 
 <a name="adding-rp"></a>
 ## Adding a Relying Party that publishes its entity configuration

@@ -389,7 +389,7 @@
           "openid_relying_party": {
             "organization_name#sv": "Sweden Connect",
             "organization_name#en": "Sweden Connect",
-            "organization_name": "Sweden Connect",
+            "organization_name": "Myndigheten för digital förvaltning",
             "organization_identifier": "urn:glue:iso6523:0007:2021006883"
           }
         },
@@ -429,7 +429,7 @@
           "openid_relying_party": {
             "organization_name#sv": "Sweden Connect",
             "organization_name#en": "Sweden Connect",
-            "organization_name": "Sweden Connect",
+            "organization_name": "Myndigheten för digital förvaltning",
             "organization_identifier": "urn:glue:iso6523:0007:2021006883"
           }
         },
@@ -469,7 +469,7 @@
           "openid_relying_party": {
             "organization_name#sv": "Sweden Connect",
             "organization_name#en": "Sweden Connect",
-            "organization_name": "Sweden Connect",
+            "organization_name": "Myndigheten för digital förvaltning",
             "organization_identifier": "urn:glue:iso6523:0007:2021006883"
           }
         },
@@ -509,7 +509,7 @@
           "openid_relying_party": {
             "organization_name#sv": "Sweden Connect",
             "organization_name#en": "Sweden Connect",
-            "organization_name": "Sweden Connect",
+            "organization_name": "Myndigheten för digital förvaltning",
             "organization_identifier": "urn:glue:iso6523:0007:2021006883"
           }
         },
@@ -554,7 +554,7 @@
           "openid_provider": {
             "organization_name#sv": "Sweden Connect",
             "organization_name#en": "Sweden Connect",
-            "organization_name": "Sweden Connect",
+            "organization_name": "Myndigheten för digital förvaltning",
             "organization_identifier": "urn:glue:iso6523:0007:2021006883"
           }
         },
@@ -575,7 +575,7 @@
                 "value": "https://local.fed.swedenconnect.se:11010/images/logo-notext.svg"
               },
               "acr_values_supported": {
-                "value": ["http://id.elegnamnden.se/loa/1.0/loa3", "http://id.elegnamnden.se/loa/1.0/loa2", "http://id.elegnamnden.se/loa/1.0/loa4"]
+                "value": ["http://id.elegnamnden.se/loa/1.0/loa3", "http://id.swedenconnect.se/loa/1.0/uncertified-loa3", "http://id.elegnamnden.se/loa/1.0/loa2", "http://id.elegnamnden.se/loa/1.0/loa4"]
               }
             }
           }
